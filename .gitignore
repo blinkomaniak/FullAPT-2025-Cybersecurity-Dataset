@@ -1,6 +1,13 @@
-# lARGE DATASETS (exclude all raw data)
+# LARGE DATASETS (exclude all raw data)
 datasets/
-data-raw/
+# Exclude data-raw contents except Jupyter notebooks
+data-raw/**/*.jsonl
+data-raw/**/*.csv
+data-raw/**/*.json
+data-raw/**/*.txt
+data-raw/**/*.py
+# But allow Jupyter notebooks in data-raw
+!data-raw/**/*.ipynb
 
 # Generate artifacts (exclude all outputs)
 data/
