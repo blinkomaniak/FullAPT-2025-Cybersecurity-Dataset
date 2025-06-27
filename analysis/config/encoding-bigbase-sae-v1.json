@@ -1,0 +1,34 @@
+{
+  "label_column": "Label",
+  "tfidf_columns": [
+    "CommandLine",
+    "ParentCommandLine",
+    "Image",
+    "ParentImage",
+    "SourceImage",
+    "TargetImage",
+    "ImageLoaded"
+  ],
+  "tfidf_params": {
+    "CommandLine": 500,
+    "ParentCommandLine": 300,
+    "Image": 300,
+    "ParentImage": 300,
+    "SourceImage": 300,
+    "TargetImage": 300,
+    "ImageLoaded": 300
+  },
+  "onehot_columns": [
+    "Computer",
+    "User",
+    "SourceUser",
+    "TargetUser",
+    "Protocol",
+    "SourcePortName",
+    "DestinationPortName"
+  ],
+  "numeric_columns": [
+    "EventID"
+  ]
+}
+

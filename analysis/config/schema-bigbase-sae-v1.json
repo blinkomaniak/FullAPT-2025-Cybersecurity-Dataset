@@ -1,0 +1,11 @@
+{
+  "core_features": [
+    "EventID", "Computer", "ProcessGuid", "ProcessId", "Image", "User",
+    "Protocol", "SourcePortName", "DestinationPortName", "ImageLoaded", "SourceImage",
+    "TargetImage", "SourceUser", "TargetUser", "CommandLine", "ParentImage", "ParentCommandLine"
+  ],
+
+  "label_column": "TacticLabel",
+  "time_column": "UtcTime",
+  "benign_label": "normal"
+}

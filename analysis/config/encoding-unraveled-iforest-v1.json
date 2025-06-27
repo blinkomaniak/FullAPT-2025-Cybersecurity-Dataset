@@ -1,0 +1,18 @@
+{
+  "dataset": "unraveled",
+  "version": "v1",
+  "categorical_columns": [
+    "src_ip", "src_mac", "src_oui",
+    "dst_ip", "dst_mac", "dst_oui"
+  ],
+  "numeric_columns": [
+    "src_port", "dst_port", "protocol", "ip_version", "vlan_id", "tunnel_id",
+    "bidirectional_first_seen_ms", "bidirectional_last_seen_ms", "bidirectional_duration_ms",
+    "bidirectional_packets", "bidirectional_bytes",
+    "src2dst_first_seen_ms", "src2dst_last_seen_ms", "src2dst_duration_ms",
+    "src2dst_packets", "src2dst_bytes",
+    "dst2src_first_seen_ms", "dst2src_last_seen_ms", "dst2src_duration_ms",
+    "dst2src_packets", "dst2src_bytes"
+  ],
+  "label_column": "Stage"
+}

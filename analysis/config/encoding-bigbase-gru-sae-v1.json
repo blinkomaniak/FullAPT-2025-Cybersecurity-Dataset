@@ -1,0 +1,26 @@
+{
+  "dataset": "bigbase",
+  "version": "v1",
+  "categorical_columns": [
+    "Computer", "User", "SourceUser", "TargetUser", 
+    "Protocol", "SourcePortName", "DestinationPortName"
+  ],
+  "tfidf_columns": [
+    "CommandLine", "ParentCommandLine", "Image", "ParentImage",
+    "SourceImage", "TargetImage", "ImageLoaded"
+  ],
+  "tfidf_params": {
+    "CommandLine": 500,
+    "ParentCommandLine": 300,
+    "Image": 300,
+    "ParentImage": 300,
+    "SourceImage": 300,
+    "TargetImage": 300,
+    "ImageLoaded": 300
+  },
+  "numeric_columns": [
+    "EventID", "ProcessId", "UtcTime"
+  ],
+  "label_column": "Label",
+  "time_column": "UtcTime"
+}

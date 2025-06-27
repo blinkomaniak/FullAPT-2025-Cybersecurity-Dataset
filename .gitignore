@@ -1,0 +1,67 @@
+# lARGE DATASETS (exclude all raw data)
+datasets/
+data-raw/
+
+# Generate artifacts (exclude all outputs)
+data/
+models/
+artifacts/
+
+# Python Virtual environment
+dataset-venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyzw
+env/
+venv/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Large files and sensitive files
+.claude/
+*.csv
+*.parquet
+*.npz
+*.h5
+*.hdf5
+*.pkl
+*.joblib
+*.tar.gz
+*.zip
+*.7z
+
+# API keys and secrets
+*api*key*.txt
+openai-api-key.txt
+*.key
+*.keys
+*.env
+
+# System files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Others folder (might contain large files)
+others/
+
+# PDFs (academic papers can be large)
+pdfs/
+docs/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
