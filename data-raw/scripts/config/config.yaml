@@ -1,0 +1,102 @@
+# Event Tracer Configuration File
+# This file contains all configurable parameters for the event tracer
+
+# Data source files
+data_sources:
+  sysmon_file: "../../apt-1/apt-1-run-01-obsolete/sysmon-2025-02-07-000001.csv"
+  caldera_file: "../../apt-1/apt-1-run-01-obsolete/apt34-02-07-test-1_event-logs_extracted_information.json" 
+  entry_config_file: "../../apt-1/apt-1-run-01-obsolete/entry_config.csv"
+
+# Script 1: Elasticsearch Downloader
+elasticsearch:
+  host: "https://10.2.0.20:9200"
+  username: "elastic"
+  password: "hiYqiU21LVg0F8krD=XN"
+  keywords: ["sysmon", "network_traffic"]
+  output_dir: "./"
+  timestamp_format: "%b %d, %Y @ %H:%M:%S.%f"
+
+# Script 2: Sysmon CSV Creator  
+sysmon_processor:
+  input_file: "-ds-logs-windows-sysmon_operational-default-2025-05-04-000001.jsonl"
+  output_file: "sysmon-2025-05-04-000001.csv"
+  backup_dir: "./backups"
+  enable_logging: true
+  enable_data_optimization: true
+
+# Script 3: Network Traffic CSV Creator
+network_traffic_processor:
+  input_file: "-ds-logs-network_traffic-flow-default-2025-05-04-000001.jsonl"
+  output_file: "network_traffic_flow-2025-05-04-000001.csv"
+  backup_dir: "./backups"
+  enable_logging: true
+  enable_exploratory_analysis: true
+  enable_progress_indicators: true
+  progress_interval: 100000
+
+# Script 5: Event Analysis (Simplified)
+event_analysis:
+  sysmon_file: "../../apt-1/apt-1-run-01-obsolete/sysmon-2025-02-07-000001.csv"
+  caldera_file: "../../apt-1/apt-1-run-01-obsolete/apt34-02-07-test-1_event-logs_extracted_information.json"
+  entry_config_file: "../../apt-1/apt-1-run-01-obsolete/entry_config.csv" 
+  output_dir: "../../apt-1/apt-1-run-01-obsolete/5_entry-events-plots"
+  enable_logging: true
+  enable_individual_plots: false
+  enable_batch_processing: true
+  default_time_window: 180
+  summary_report: true
+
+# Time window settings for event detection
+time_windows:
+  primary_seconds: 180      # Primary time window around entry timestamp
+  fallback_seconds: 300     # Fallback expanded time window
+  
+# Output and visualization settings
+output:
+  directory: "../../apt-1/apt-1-run-01-obsolete/5_entry-events-plots"
+  plot_dpi: 150
+  figure_size: [16, 8]
+  
+# Analysis parameters
+analysis:
+  active_masks: [1, 2, 3]   # Which masks to use (1=child_process, 2=child_processcreate, 3=child_eventid_8_or_10)
+  max_recursion_depth: 10   # Maximum recursion depth for event tracing
+  enable_recursive_tracing: true
+  
+# Performance settings  
+performance:
+  chunk_size: 500           # Target memory per chunk in MB
+  memory_optimization: true
+  enable_parallel_processing: false
+  max_workers: 4            # Maximum number of parallel workers (null for auto)
+  memory_threshold_mb: 1000 # File size threshold for chunked loading in MB
+  use_multiprocessing: false # Use processes instead of threads (slower startup, better for CPU-bound)
+  
+# Debug and logging
+debug:
+  enable_debug_mode: false
+  log_level: "INFO"         # DEBUG, INFO, WARNING, ERROR
+  performance_monitoring: false
+
+# Visualization options
+visualization:
+  default_show_arrows: false
+  event_colors:
+    1: "#E74C3C"    # Red - Process Create
+    3: "#95A5A6"    # Gray - Network Connection  
+    5: "#1ABC9C"    # Teal - Process Terminate
+    7: "#F39C12"    # Orange - Image Load
+    8: "#8E44AD"    # Purple - CreateRemoteThread
+    9: "#D35400"    # Dark Orange - RawAccessRead
+    10: "#F1C40F"   # Yellow - Process Access
+    11: "#E91E63"   # Pink - File Create
+    12: "#3498DB"   # Blue - Registry Event
+    13: "#9B59B6"   # Light Purple - Registry Event
+    15: "#16A085"   # Dark Teal - File Create Stream Hash
+    17: "#2ECC71"   # Green - Pipe Create
+    18: "#FF69B4"   # Hot Pink - Pipe Connect
+    22: "#34495E"   # Dark Gray - DNS Event
+    23: "#2C3E50"   # Navy - File Delete
+    24: "#27AE60"   # Forest Green - Clipboard Change
+    25: "#C0392B"   # Dark Red - Process Tampering
+  padding_percentage: 0.05  # 5% padding for plot windows
