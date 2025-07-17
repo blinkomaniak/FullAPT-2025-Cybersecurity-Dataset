@@ -1,22 +1,22 @@
-# Advanced Cybersecurity Research Platform
+# Bigbase IDS Dataset
 
-A comprehensive, dual-purpose cybersecurity research platform combining **APT attack simulation analysis** and **machine learning-based anomaly detection**. This platform enables advanced threat analysis through both real-time attack correlation and large-scale ML model evaluation across multiple cybersecurity datasets.
+A comprehensive labeled cybersecurity dataset for training AI-driven Intrusion Detection Systems (IDS). This dataset contains correlated attack simulations with system telemetry data, providing high-quality labeled examples suitable for machine learning-based threat detection research and model development.
 
-## 🏗️ Platform Architecture
+## 🏗️ Dataset Contents and Creation Pipeline
 
-This research platform consists of two integrated but distinct systems:
+This dataset was created using two integrated components that process and validate cybersecurity data:
 
-### 1. **APT Attack Analysis Pipeline** (`data-raw/`)
-Real-time APT simulation analysis with Windows Sysmon, network traffic, and Caldera attack correlation.
+### 1. **APT Data Processing Pipeline** (`data-raw/`)
+The processing scripts used to correlate APT attack simulations with Windows Sysmon events, network traffic, and Caldera attack data, creating the labeled cybersecurity dataset.
 
-### 2. **ML Anomaly Detection Framework** (`analysis/`)
-Multi-model machine learning pipeline for cybersecurity dataset evaluation using SAE, LSTM-SAE, GRU-SAE, and Isolation Forest.
+### 2. **ML Dataset Evaluation Framework** (`analysis/`)
+Validation scripts that verify dataset quality using multiple machine learning models (SAE, LSTM-SAE, GRU-SAE, Isolation Forest) to ensure the dataset is suitable for AI-driven IDS development.
 
 ## 📂 Complete Directory Structure
 
 ```
-research/                                    # Platform root directory
-├── 🎯 data-raw/                             # APT ATTACK ANALYSIS SYSTEM
+bigbase-ids-dataset/                         # Bigbase IDS Dataset root directory
+├── 🎯 data-raw/                             # DATASET CREATION SCRIPTS & APT STRUCTURES
 │   ├── scripts/                             # APT processing pipeline
 │   │   ├── pipeline/                        # Core processing scripts (#1-#6)
 │   │   │   ├── 1_elastic_index_downloader.py
@@ -35,20 +35,20 @@ research/                                    # Platform root directory
 │   │   ├── dev/                             # Development notebooks
 │   │   ├── exploratory/                     # Data exploration notebooks
 │   │   └── tools/                           # Utility scripts
-│   ├── apt-1/ to apt-6/                     # APT simulation runs (50 total)
-│   │   └── apt-X-run-XX/                    # Individual simulation data
-│   │       ├── config.yaml                  # Run configuration
-│   │       ├── entry_config.csv             # Entry mapping
-│   │       ├── *event-logs.json             # Original Caldera reports
-│   │       ├── *extracted_information.json  # Processed Caldera reports
-│   │       ├── sysmon-run-XX.csv            # Windows event logs
-│   │       ├── network_traffic_flow-run-XX.csv # Network flow data
-│   │       └── *.jsonl                      # Raw Elasticsearch data
+│   ├── apt-1/ to apt-6/                     # Dataset structure (50 APT scenarios)
+│   │   └── apt-X-run-XX/                    # Individual attack scenario directories
+│   │       ├── config.yaml                  # Scenario configuration
+│   │       ├── entry_config.csv             # Attack entry mapping
+│   │       ├── *event-logs.json             # Original Caldera attack reports
+│   │       ├── *extracted_information.json  # Processed attack reports
+│   │       ├── sysmon-run-XX.csv            # Labeled Windows event logs
+│   │       ├── network_traffic_flow-run-XX.csv # Labeled network flow data
+│   │       └── *.jsonl                      # Raw telemetry data
 │   ├── issues/                              # Known issues and solutions
 │   ├── dataset-backup/                      # Compressed backups
 │   └── README.md                            # APT pipeline documentation
 │
-├── 🤖 analysis/                             # ML ANOMALY DETECTION FRAMEWORK
+├── 🤖 analysis/                             # DATASET VALIDATION SCRIPTS
 │   ├── sae/                                 # Stacked Autoencoder pipeline
 │   │   ├── 01-aggregation.py
 │   │   ├── 02-encoding-bigbase-sae.py
@@ -168,16 +168,16 @@ research/                                    # Platform root directory
 └── README.md                                # This file
 ```
 
-## 🎯 **APT Attack Analysis System** (`data-raw/`)
+## 🎯 **APT Data Processing System** (`data-raw/`)
 
 ### Overview
-Real-time analysis pipeline for Advanced Persistent Threat simulations with 50 comprehensive attack runs across 6 APT campaigns. Correlates Windows Sysmon events, network traffic flows, and Caldera attack simulation data.
+Data processing pipeline that transforms APT attack simulations into labeled cybersecurity datasets. Processes 50 comprehensive attack runs across 6 APT campaigns, correlating Windows Sysmon events, network traffic flows, and Caldera attack simulation data to create training data for AI-driven IDS.
 
 ### Key Capabilities
 - **Multi-modal Data Processing**: Windows events, network flows, attack logs
-- **Real-time Correlation**: 90-95% success rate in correlating attack events with system telemetry
-- **Automated Processing**: Batch processors for large-scale analysis
-- **Interactive Analysis**: Individual event tracking and visualization
+- **Attack-Event Correlation**: 90-95% success rate in labeling attack events within system telemetry
+- **Automated Dataset Creation**: Batch processors for large-scale labeled dataset generation
+- **Quality Validation**: Individual event tracking and dataset verification
 
 ### Core Pipeline Scripts
 1. **Script #1**: Elasticsearch data downloader with secure authentication
@@ -187,11 +187,11 @@ Real-time analysis pipeline for Advanced Persistent Threat simulations with 50 c
 5. **Script #5**: Main correlation engine with time-window analysis
 6. **Script #6**: Timeline visualization generator
 
-### Dataset Scope
-- **50 APT Simulation Runs**: apt-1-run-01 through apt-6-run-50
-- **6 APT Campaigns**: Different attack patterns and techniques
-- **Multi-gigabyte Scale**: 1-5GB raw data per run
-- **High Success Rate**: 90-95% event correlation accuracy
+### Generated Datasets
+- **50 Labeled Attack Scenarios**: apt-1-run-01 through apt-6-run-50
+- **6 APT Campaign Types**: Different attack patterns and techniques for dataset diversity
+- **Multi-gigabyte Scale**: 1-5GB processed labeled data per scenario
+- **High Labeling Accuracy**: 90-95% attack event labeling success rate
 
 ### Usage Example
 ```bash
@@ -201,10 +201,10 @@ cd data-raw/scripts/batch
 ./sysmon_batch_processor.sh               # Run correlation analysis
 ```
 
-## 🤖 **ML Anomaly Detection Framework** (`analysis/`)
+## 🤖 **ML Dataset Evaluation Framework** (`analysis/`)
 
 ### Overview
-Comprehensive machine learning pipeline for cybersecurity anomaly detection using multiple model architectures. Supports benign-only training for unsupervised anomaly detection across three major cybersecurity datasets.
+Validates the quality and suitability of generated cybersecurity datasets using multiple machine learning model architectures. Tests dataset effectiveness for training AI-driven IDS by evaluating detection performance across different model types.
 
 ### Supported Models
 - **SAE**: Stacked Autoencoder with bottleneck architecture
@@ -219,10 +219,10 @@ Comprehensive machine learning pipeline for cybersecurity anomaly detection usin
 4. **Stage 04**: Evaluation with ROC-AUC, precision, recall metrics
 5. **Stage 05**: Result visualization and analysis
 
-### Datasets
-- **bigbase**: 50 Windows event log CSV files with TF-IDF text processing
-- **unraveled**: Multi-modal data (host logs, network flows, NIDS)
-- **dapt2020**: Pre-processed network flows with 85 CICFlowMeter features
+### Dataset Types Supported
+- **bigbase**: Windows event logs with text processing for command-line analysis
+- **unraveled**: Multi-modal cybersecurity data (host logs, network flows, NIDS)
+- **dapt2020**: Network flow data with extracted features for baseline comparison
 
 ### Usage Examples
 ```bash
@@ -239,21 +239,21 @@ cd analysis/comparative-evaluation
 python comparative_analysis.py
 ```
 
-## 📊 **Integrated Research Capabilities**
+## 📊 **Integrated Dataset Creation Capabilities**
 
-### Cross-System Analysis
-The platform enables unique research opportunities by combining:
-- **APT Attack Patterns** from real simulation data
-- **ML Model Performance** on large-scale cybersecurity datasets
-- **Multi-modal Data Fusion** across different data types
-- **Temporal Analysis** of attack progression and system response
+### End-to-End Dataset Pipeline
+The platform provides complete dataset creation workflow:
+- **Attack Simulation Processing** from real APT campaign data
+- **ML Model Validation** to ensure dataset quality and effectiveness
+- **Multi-modal Data Integration** across different cybersecurity data types
+- **Temporal Pattern Preservation** for time-series attack analysis
 
-### Research Applications
-1. **Attack Detection Evaluation**: Test ML models against real APT simulation data
-2. **Feature Engineering**: Extract features from APT data for ML training
-3. **Temporal Pattern Analysis**: Use LSTM/GRU models on APT time-series data
-4. **Cross-Dataset Validation**: Validate models across different cybersecurity datasets
-5. **Anomaly Detection**: Apply trained models to detect novel attack patterns
+### Dataset Applications
+1. **IDS Training Data**: High-quality labeled datasets for AI-driven intrusion detection
+2. **Attack Pattern Recognition**: Datasets containing diverse attack techniques and patterns
+3. **Temporal Attack Analysis**: Time-series data for sequential attack modeling
+4. **Multi-modal Fusion**: Combined network, host, and application-level attack data
+5. **Benchmark Creation**: Standardized datasets for comparing IDS model performance
 
 ## 🚀 **Quick Start Guide**
 
@@ -266,27 +266,27 @@ source dataset-venv/bin/activate
 python -c "import pandas, numpy, tensorflow, sklearn, matplotlib"
 ```
 
-### APT Analysis Quick Start
+### Dataset Creation Quick Start
 ```bash
-# Navigate to APT system
+# Navigate to data processing system
 cd data-raw/scripts/pipeline
 
-# Process a single APT run
+# Process a single APT scenario into labeled dataset
 python 2_sysmon_csv_creator.py --apt-dir ../../apt-6/apt-6-run-50
 python 3_network_traffic_csv_creator.py --apt-dir ../../apt-6/apt-6-run-50
 python 4_universal_caldera_report_transformer.py --apt-dir ../../apt-6/apt-6-run-50
 python 5_sysmon_event_analysis.py --apt-dir ../../apt-6/apt-6-run-50
 ```
 
-### ML Framework Quick Start
+### Dataset Validation Quick Start
 ```bash
-# Navigate to ML framework
+# Navigate to evaluation framework
 cd analysis/sae
 
-# Run complete SAE pipeline
+# Validate dataset quality with SAE model
 python run_sae_pipeline.py --dataset bigbase --version v1
 
-# Compare multiple models
+# Compare dataset performance across models
 cd ../comparative-evaluation
 python comparative_analysis.py
 ```
@@ -320,19 +320,19 @@ jupyter
 notebook
 ```
 
-## 📈 **Performance Metrics**
+## 📈 **Dataset Creation Performance**
 
-### APT Analysis Performance
-- **Event Correlation**: 90-95% success rate
-- **Processing Speed**: 15-60 minutes per APT run
-- **Data Volume**: 500K+ Sysmon events, 1M+ network flows per run
-- **Batch Processing**: 50 runs in 3-5 hours
+### Data Processing Performance
+- **Labeling Accuracy**: 90-95% attack event labeling success rate
+- **Processing Speed**: 15-60 minutes per APT scenario
+- **Dataset Scale**: 500K+ labeled Sysmon events, 1M+ network flows per scenario
+- **Batch Creation**: 50 labeled scenarios in 3-5 hours
 
-### ML Framework Performance
-- **Model Training**: 10-60 minutes depending on model and dataset
-- **Memory Efficiency**: Optimized for large datasets with sparse matrices
-- **Evaluation Speed**: Comprehensive evaluation in 5-15 minutes
-- **Cross-Model Comparison**: Complete analysis in 30-60 minutes
+### Dataset Validation Performance
+- **Model Training**: 10-60 minutes depending on model complexity and dataset size
+- **Memory Efficiency**: Optimized for large cybersecurity datasets with sparse matrices
+- **Validation Speed**: Comprehensive dataset evaluation in 5-15 minutes
+- **Multi-Model Comparison**: Complete dataset quality analysis in 30-60 minutes
 
 ## 📝 **Research Documentation**
 
@@ -342,17 +342,18 @@ notebook
 - **Experimental Design**: Detailed documentation for each model pipeline
 
 ### Technical Documentation
-- **APT Pipeline**: Complete documentation in `data-raw/scripts/README.md`
-- **ML Framework**: Individual documentation for each model pipeline
-- **Configuration**: Schema and encoding configuration examples
-- **Troubleshooting**: Common issues and solutions
+- **Data Processing Pipeline**: Complete documentation in `data-raw/scripts/README.md`
+- **Dataset Evaluation**: Individual documentation for each model validation pipeline
+- **Configuration**: Schema and encoding configuration examples for different dataset types
+- **Troubleshooting**: Common issues and solutions for dataset creation
 
 ## 🤝 **Contributing and Usage**
 
 ### Research Ethics
-- This platform is designed for **defensive cybersecurity research** only
-- Attack simulation data is for **threat detection improvement**
-- No malicious tools or techniques are included
+- This dataset creation platform is designed for **defensive cybersecurity research** only
+- Generated datasets are for **improving AI-driven intrusion detection systems**
+- Attack simulation data is used solely for creating training data for defensive purposes
+- No malicious tools or offensive techniques are included
 
 ### Best Practices
 1. **Data Integrity**: Always backup data before processing
@@ -366,16 +367,16 @@ notebook
 - Update documentation for new features
 - Include validation and testing capabilities
 
-## 📊 **Research Impact**
+## 📊 **Dataset Impact**
 
-This platform enables cutting-edge research in:
-- **Advanced Threat Detection** using ML-based approaches
-- **Multi-modal Cybersecurity Analytics** across different data types
-- **Temporal Attack Pattern Analysis** with sequence-based models
-- **Cross-Dataset Validation** for robust model evaluation
-- **Real-time Security Operations** with automated correlation
+This platform enables cutting-edge cybersecurity dataset creation for:
+- **AI-driven IDS Development** with high-quality labeled training data
+- **Multi-modal Attack Detection** across network, host, and application layers
+- **Temporal Attack Pattern Learning** with time-series labeled datasets
+- **Cross-Attack-Type Validation** for robust IDS model training
+- **Standardized Benchmarking** for comparing IDS model performance
 
 **Platform Status**: ✅ Production Ready  
-**Research Applications**: Academic and industrial cybersecurity research  
-**Model Success Rate**: 90-95% across different architectures  
-**Dataset Coverage**: 50 APT simulations + 3 large-scale cybersecurity datasets
+**Primary Application**: Creating labeled cybersecurity datasets for AI-driven IDS research and development  
+**Labeling Accuracy**: 90-95% attack event labeling success rate  
+**Dataset Scale**: 50 APT attack scenarios + multiple cybersecurity dataset types for comprehensive IDS training
