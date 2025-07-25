@@ -1,4 +1,4 @@
-# Bigbase IDS Dataset
+# FullAPT-2025: A Cybersecurity Dataset Covering the Full APT Kill Chain with Host‑Network Telemetry
 
 A comprehensive labeled cybersecurity dataset for training AI-driven Intrusion Detection Systems (IDS). This dataset contains correlated attack simulations with system telemetry data, providing high-quality labeled examples suitable for machine learning-based threat detection research and model development.
 
