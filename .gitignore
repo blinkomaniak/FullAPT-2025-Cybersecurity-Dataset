@@ -72,3 +72,74 @@ docs/
 *.tmp
 *.temp
 .cache/
+# Suggested additions to .gitignore for scripts/ directory
+
+# ============================================
+# BACKUP AND DEPRECATED FILES
+# ============================================
+scripts/exploratory/backup-scripts/
+scripts/exploratory/deprecated/
+scripts/**/backup/
+scripts/**/deprecated/
+scripts/**/old/
+
+# Backup file patterns
+*.bak
+*.bak2
+*-BACK.py
+*-BACK2.py
+*-old.py
+*-OLD.py
+*\ (copy).py
+*\ (copy).md
+
+# ============================================
+# SESSION AND TEMPORARY DOCUMENTATION
+# ============================================
+scripts/exploratory/SESSION_RECOVERY_GUIDE.md
+CLAUDE_BACKUP.md
+CLAUDE_HISTORY.md
+
+# ============================================
+# ANALYSIS RESULTS (large folders)
+# ============================================
+analysis/correlation-analysis/
+analysis/correlation-analysis-v2/
+analysis/correlation-analysis-v3/
+analysis/modeling/
+analysis/netflow-analysis/
+analysis/network-community-id-analysis/
+analysis/process-identity-consistency/
+
+# ============================================
+# DATASETS AND INFRASTRUCTURE
+# ============================================
+dataset/
+infrastructure/
+augment-kv-store/
+backups/
+backup-deprecated/
+other-datasets/
+
+# ============================================
+# SPECIFIC FILES TO EXCLUDE
+# ============================================
+# Old integrated netflow labeler (superseded by v2)
+scripts/exploratory/INTEGRATED_netflow_labeler-BACK.py
+scripts/exploratory/INTEGRATED_netflow_labeler-BACK2.py
+scripts/exploratory/INTEGRATED_netflow_labeler-v1.py
+scripts/exploratory/INTEGRATED_netflow_labeler-v2.py
+scripts/exploratory/INTEGRATED_netflow_labeler\ (before\ dividing\ by\ protocol).py
+scripts/exploratory/INTEGRATED_netflow_labeler\ (before\ sub-folders).py
+scripts/exploratory/INTEGRATED_netflow_labeler\ (before\ time-window\ automation).py
+scripts/exploratory/INTEGRATED_netflow_labeler\ (copy).py
+
+# Old seed/lifecycle scripts
+scripts/exploratory/5_sysmon_seed_event_extractor.py.bak
+scripts/exploratory/6_sysmon_attack_lifecycle_tracer.py.bak
+scripts/exploratory/6_sysmon_attack_lifecycle_tracer.py.bak2
+scripts/exploratory/7_create_labeled_sysmon_dataset.py.bak
+scripts/exploratory/7_create_labeled_sysmon_dataset\ (copy).py
+
+# Corrected YAML files (keep only final versions)
+scripts/exploratory/apt-yaml/Wizard\ Spider-chatgpt-correction.yaml
