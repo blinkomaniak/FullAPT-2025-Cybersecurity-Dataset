@@ -1,0 +1,503 @@
+GLOBAL PIPELINE OVERVIEW FIGURE
+
+Figure G1: Dual-Domain APT Dataset Labeling Pipeline Architecture
+
+Type: Multi-tier flowchart with data flow and decision points
+
+Components:
+┌─────────────────────────────────────────────────────────────────┐
+│                    TIER 1: RAW DATA EXTRACTION                  │
+│  ┌──────────────┐                                               │
+│  │ Elasticsearch│ → JSONL (Sysmon) ──────┐                      │
+│  │   Cluster    │ → JSONL (NetFlow) ─────┤                      │
+│  └──────────────┘                        │                      │
+│                    [Step 1]              ↓                       │
+└──────────────────────────────────────────┼───────────────────────┘
+                                            │
+┌──────────────────────────────────────────┼───────────────────────┐
+│                TIER 2: DATA PREPROCESSING │                      │
+│                                          │                       │
+│  ┌─────────────────┐          ┌─────────▼────────┐             │
+│  │ Sysmon JSONL    │ [Step 2] │ NetFlow JSONL    │ [Step 3]    │
+│  │  → CSV Creator  │ ────────►│  → CSV Creator   │             │
+│  └────────┬────────┘          └────────┬─────────┘             │
+│           │                            │                        │
+│           ├─► sysmon-run-XX.csv        ├─► netflow-run-XX.csv  │
+└───────────┼────────────────────────────┼────────────────────────┘
+            │                            │
+            │    ┌──────────────────────┐│
+            │    │ OPTIONAL BRANCH      ││ [Steps 4-5]
+            └───►│ Quality Assessment   ││ Correlation Analysis
+                │ & Visualization      ││ Attribution Stats
+                └──────────────────────┘│
+            │                            │
+┌───────────┼────────────────────────────┼────────────────────────┐
+│           │   TIER 3: HUMAN-IN-LOOP   │                        │
+│           │        LABELING            │                        │
+│           ↓                            │                        │
+│  ┌─────────────────┐                  │                        │
+│  │ Seed Event      │ [Step 6]         │                        │
+│  │ Extractor       │                  │                        │
+│  └────────┬────────┘                  │                        │
+│           │                            │                        │
+│           ├─► all_target_events.csv   │                        │
+│           │    (for manual marking)   │                        │
+│           │         │                  │                        │
+│           │    [ANALYST REVIEW]        │                        │
+│           │    Mark seeds with         │                        │
+│           │    Tactic + Technique      │                        │
+│           │         │                  │                        │
+│           ↓         ↓                  │                        │
+│  ┌─────────────────┐                  │                        │
+│  │ Attack Lifecycle│ [Step 7]         │                        │
+│  │ Tracer          │                  │                        │
+│  └────────┬────────┘                  │                        │
+│           │                            │                        │
+│           ├─► traced_events_v2.csv    │                        │
+└───────────┼────────────────────────────┼────────────────────────┘
+            │                            │
+┌───────────┼────────────────────────────┼────────────────────────┐
+│           │  TIER 4: DUAL-DOMAIN      │                        │
+│           │     DATASET LABELING       │                        │
+│           ↓                            │                        │
+│  ┌─────────────────┐                  │                        │
+│  │ Labeled Sysmon  │ [Step 8]         │                        │
+│  │ Dataset Creator │                  │                        │
+│  └────────┬────────┘                  │                        │
+│           │                            │                        │
+│           ├─► sysmon-labeled.csv      │                        │
+│           │    (benign/malicious)     │                        │
+│           │                            │                        │
+│           │         ┌──────────────────┘                        │
+│           ↓         ↓                                           │
+│  ┌──────────────────────┐                                      │
+│  │ Labeled NetFlow      │ [Step 9]                             │
+│  │ Dataset Creator      │                                      │
+│  │ (Dual-Domain)        │                                      │
+│  └──────────┬───────────┘                                      │
+│             │                                                   │
+│             ├─► verification_matrix.csv                        │
+│             │   (Tier 0/1/2 labeled NetFlow)                   │
+│             │   + Dual-domain timelines                        │
+└─────────────┼───────────────────────────────────────────────────┘
+            │
+            ↓
+    ┌─────────────────────┐
+    │  FEATURE ENGINEERING │ [Next Phase]
+    │  & ML MODELING       │
+    └─────────────────────┘
+
+Visual Design:
+- 4 horizontal tiers with distinct colors (blue → green → yellow → red gradient)
+- Solid arrows for main pipeline flow
+- Dashed arrows for optional branches
+- Human icon for analyst review step
+- Database icons for dataset outputs
+- Clear tier labels with descriptions
+
+---
+STEP-BY-STEP FIGURE SUGGESTIONS
+
+Step 1: Elasticsearch Index Downloader
+
+Figure 1.1: Elasticsearch Data Extraction Architecture
+- Type: System architecture diagram
+- Components:
+- Elasticsearch cluster (cloud icon with "10.2.0.20:9200")
+- Two index types: sysmon and network_traffic
+- Scroll API mechanism (showing pagination)
+- Compressed JSONL output files
+- Visual elements:
+- Network connection line
+- Data flow arrows showing JSONL.gz files
+- File size indicators (compression ratio)
+
+Figure 1.2: Index Discovery Pattern Matching
+- Type: Pattern matching flowchart
+- Shows: How keywords ('sysmon', 'network_traffic') match index names
+- Example indices:
+- ds-logs-windows-sysmon_operational-default-run-04
+- ds-logs-network_traffic-flow-default-run-04
+
+---
+Step 2: Sysmon CSV Creator
+
+Figure 2.1: Multi-Threaded JSONL Processing Pipeline
+- Type: Data flow diagram with parallel processing
+- Components:
+- JSONL input stream (compressed)
+- Multi-threaded workers (show ThreadPoolExecutor with N workers)
+- XML parsing stage (BeautifulSoup4)
+- Field extraction stage
+- CSV aggregation stage
+- Visual elements:
+- Multiple parallel lanes for thread processing
+- Event count metrics at each stage
+- Memory/performance indicators
+
+Figure 2.2: Sysmon Event Schema Transformation
+- Type: Before/After comparison table
+- Left side: Raw JSONL structure (nested JSON with XML)
+- Right side: Normalized CSV columns
+- Highlight transformations:
+- XML → parsed fields
+- Nested JSON → flat columns
+- Timestamp standardization
+
+Figure 2.3: EventID Distribution Chart
+- Type: Horizontal bar chart
+- X-axis: Event count
+- Y-axis: EventID types (1, 3, 11, 23, etc.)
+- Shows: Typical distribution across APT run
+- Annotations: EventID meanings (Process Creation, Network Connection, etc.)
+
+---
+Step 3: Network Traffic CSV Creator
+
+Figure 3.1: Network Flow Aggregation Logic
+- Type: Conceptual diagram showing flow grouping
+- Shows:
+- Multiple raw network events with same network_traffic_flow_id
+- Aggregation process (groupBy operation)
+- Resulting single flow record with aggregated metrics
+- Metrics shown:
+- Total bytes calculation
+- Total packets calculation
+- Flow duration (event_start → event_end)
+- Community ID preservation
+
+Figure 3.2: Community ID Correlation Schema
+- Type: Network diagram
+- Shows:
+- Bidirectional flow (A → B and B → A)
+- Community ID linking both directions
+- Process attribution fields
+- Visual elements:
+- Two hosts with IP addresses
+- Bidirectional arrows with community_id label
+- Process information boxes
+
+Figure 3.3: Performance Scaling Chart
+- Type: Line chart
+- X-axis: Number of workers (1, 2, 4, 8, 16)
+- Y-axis: Events/second processing rate
+- Shows: Multi-threading performance scaling
+- Annotation: Optimal chunk_size settings
+
+---
+Step 4: Enhanced Temporal Causation Correlator (OPTIONAL)
+
+Figure 4.1: Temporal Causation Window Analysis
+- Type: Timeline diagram with correlation windows
+- Shows:
+- Sysmon process creation events (vertical bars on timeline)
+- NetFlow events (different colored bars)
+- Temporal correlation windows (shaded regions around events)
+- Attribution links (curved arrows connecting correlated events)
+- Time axis: Horizontal timeline in seconds
+- Annotations: Causation delays, correlation confidence
+
+Figure 4.2: Attribution Rate by APT Campaign
+- Type: Grouped bar chart
+- X-axis: APT types (APT-1 through APT-6)
+- Y-axis: Attribution rate percentage (0-100%)
+- Bars: Show mean attribution rate with error bars (std dev)
+- Highlight: 90% threshold line (high-performing runs)
+- Color coding: Green (>90%), Yellow (70-90%), Red (<70%)
+
+Figure 4.3: Process Attribution Breakdown
+- Type: Treemap or sunburst chart
+- Hierarchy:
+- APT campaign → Executable → Attribution confidence
+- Size: Proportional to number of attributed flows
+- Color: Attribution confidence level
+
+---
+Step 5: Comprehensive Correlation Analysis (OPTIONAL)
+
+Figure 5.1: 8-Panel Dashboard Overview (REFERENCE ONLY)
+- Type: Multi-panel grid layout (2x4 or 4x2)
+- Note: This figure already exists as script output
+- Description for documentation:
+- Panel 1: Attribution Rate by Campaign (bar chart)
+- Panel 2: Attribution Distribution (histogram)
+- Panel 3: Temporal Patterns (scatter plot)
+- Panel 4: Process Breakdown (treemap)
+- Panel 5: Confidence Levels (pie chart)
+- Panel 6: Timeline Analysis (timeline)
+- Panel 7: Performance Metrics (KPI cards)
+- Panel 8: Quality Dashboard (gauges)
+
+Figure 5.2: Cross-Campaign Statistical Summary
+- Type: Box plot comparison
+- X-axis: APT campaigns
+- Y-axis: Attribution rate
+- Shows: Median, quartiles, outliers for each campaign
+- Annotations: Sample size (n=X runs) per campaign
+
+---
+Step 6: Sysmon Seed Event Extractor
+
+Figure 6.1: Target Event Filtering Logic
+- Type: Funnel diagram
+- Stages:
+a. Raw Sysmon events (all EventIDs) - e.g., 145,832 events
+b. Filter to EventID 1, 11, 23 - e.g., 47,899 events (32.8%)
+c. Manual analyst review
+d. Marked seed events - e.g., 215 events (0.14%)
+- Visual: Each stage narrows with count and percentage
+- Color coding: Gray → Yellow → Orange → Red (increasing significance)
+
+Figure 6.2: Manual Selection Workflow
+- Type: User interaction flowchart
+- Steps:
+a. Script extracts target events → CSV
+b. Analyst opens CSV in editor
+c. Analyst reviews CommandLine/TargetFilename columns
+d. Analyst marks Seed_Event with 'x'
+e. Analyst fills Tactic + Technique columns
+f. Save CSV
+g. Re-run script (selections preserved)
+- Icons: Human silhouette for analyst steps, computer for automated steps
+
+Figure 6.3: EventID Distribution in Extracted Events
+- Type: Pie chart
+- Slices:
+- EventID 1 (Process Creation): ~60% - Blue
+- EventID 11 (File Creation): ~30% - Green
+- EventID 23 (File Deletion): ~10% - Red
+- Annotations: Typical use cases for each EventID
+
+---
+Step 7: Sysmon Attack Lifecycle Tracer
+
+Figure 7.1: ProcessGuid Correlation Tree
+- Type: Process tree diagram
+- Shows:
+- Root: Seed event (red star) - e.g., sandcat.exe
+- Level 1 children: Direct child processes (blue circles) - e.g., cmd.exe
+- Level 2+ children: Grandchildren processes (lighter blue)
+- Edges: ParentProcessGuid → ProcessGuid relationships
+- Annotations:
+- Tactic labels on each node
+- Timestamp progression (left to right)
+- CommandLine excerpts
+
+Figure 7.2: Multi-EventID Handling Strategy
+- Type: Decision tree / strategy matrix
+- Rows: EventID types (1, 11, 23)
+- Columns: Correlation strategy, Timeline plotting, Tactic propagation
+- EventID 1: ProcessGuid correlation → Recursive tracing → Inherit from seed
+- EventID 11: Individual event → Direct plotting → Inherit from seed
+- EventID 23: Individual event → Direct plotting → Inherit from seed
+
+Figure 7.3: Attack Lifecycle Expansion Metrics
+- Type: Waterfall chart
+- Shows:
+- Starting: 15 seed events (bar 1)
+    - ProcessGuid traced: +198 events (bar 2, stacked)
+    - File operations: +49 events (bar 3, stacked)
+- Total: 247 traced events (bar 4, total height)
+- Color coding: Seed (red), EventID 1 (blue), EventID 11 (green), EventID 23 (yellow)
+
+Figure 7.4: Timeline Visualization Example
+- Type: Scatter plot with temporal progression
+- X-axis: Time (HH:MM:SS)
+- Y-axis: Computer hostname
+- Markers:
+- Red stars (★): Seed events
+- Colored circles (●): Traced events (color by tactic)
+- Annotations: Attack phase labels (Initial Access → Execution → Discovery →
+Exfiltration)
+
+---
+Step 8: Create Labeled Sysmon Dataset
+
+Figure 8.1: Labeling Merge Logic
+- Type: Venn diagram / data merge flowchart
+- Shows:
+- Left circle: Raw Sysmon dataset (145,832 events)
+- Right circle: Traced events (247 events)
+- Intersection: Matching events → labeled "malicious"
+- Left-only: Non-matched events → labeled "benign"
+- Output: Complete labeled dataset (100% coverage)
+
+Figure 8.2: Label Distribution Pyramid
+- Type: Inverted pyramid / imbalanced dataset visualization
+- Large section (99.9%): Benign events - Gray
+- Tiny section (0.1%): Malicious events - Red
+- Annotations:
+- Absolute counts (e.g., 145,617 benign, 215 malicious)
+- Percentage breakdown
+- Imbalanced learning challenge note
+
+Figure 8.3: Malicious Event Tactic Breakdown
+- Type: Horizontal stacked bar chart or treemap
+- Shows: Malicious events (215 total) broken down by tactic
+- Categories:
+- Discovery: 86 events (40%)
+- Defense-Evasion: 24 events (11%)
+- Persistence: 21 events (10%)
+- Exfiltration: 20 events (9%)
+- Collection: 18 events (8%)
+- Execution: 16 events (7%)
+- Others: 30 events (14%)
+- Color: MITRE ATT&CK tactic color scheme
+
+Figure 8.4: Tactic Propagation Flow
+- Type: Sankey diagram or flow diagram
+- Shows:
+- Left: Seed events with tactic labels
+- Middle: Tracing process (ProcessGuid correlation)
+- Right: Child events inheriting tactic labels
+- Thickness: Proportional to number of events
+
+---
+Step 9: Create Labeled NetFlow Dataset (FINAL OUTPUT)
+
+Figure 9.1: Interactive Configuration Wizard Flow
+- Type: 6-step wizard flowchart
+- Steps (with icons):
+a. 🌐 IP Configuration (Attacker, Victim, Server IPs)
+b. 🔍 IP Scope Selection (Restricted/Unrestricted)
+c. ⏱️ Correlation Parameters (Time window ±N seconds)
+d. 📊 Protocol Filtering (ICMP/UDP/TCP thresholds)
+e. 🎯 Causality Attribution (Direct/Indirect thresholds)
+f. ✅ Validation & Preview (Sample verification)
+- Visual: Vertical progression with data flow between steps
+
+Figure 9.2: Three-Tier Labeling System Architecture
+- Type: Layered pyramid diagram
+- Tier 0 (Base): Attacker IP Baseline
+- All flows from/to attacker IPs
+- Largest coverage
+- Color: Dark red
+- Tier 1 (Middle): Direct NetFlow Attribution
+- Sysmon event → NetFlow correlation
+- Medium coverage
+- Color: Orange
+- Tier 2 (Top): Sub-NetFlow Attribution
+- NetFlow community ID propagation
+- Detailed attribution
+- Color: Yellow
+- Annotations: Precision/Recall trade-offs at each tier
+
+Figure 9.3: Dual-Domain Temporal Correlation
+- Type: Dual-timeline parallel plot
+- Upper timeline: Sysmon events (host domain)
+- Process creation (EventID 1) - Blue markers
+- File operations (EventID 11/23) - Green/Red markers
+- Lower timeline: NetFlow events (network domain)
+- TCP flows - Solid lines
+- UDP flows - Dashed lines
+- ICMP - Dotted lines
+- Vertical connectors: Correlation links with time-window shading (±10 sec)
+- Annotations: Causality labels (Tier 0/1/2)
+
+Figure 9.4: Filtering Priority Logic
+- Type: Decision tree flowchart
+- Decision sequence:
+a. Is IP in attacker whitelist? → YES: Label as Tier 0
+b. Is protocol ICMP? → YES: Label as Tier 0
+c. Is protocol UDP? → Check causality attribution → Label Tier 1/2
+d. Is protocol TCP? → Check packet count > threshold → Label or filter
+e. No match → Label as benign
+- Visual: Clear YES/NO branches with color coding
+
+Figure 9.5: Smart Sampling Strategy
+- Type: Before/After comparison with sampling visualization
+- Top panel (Before): 2.6M events → Memory crash
+- Bottom panel (After): 200K sampled events
+- Sampling visualization:
+- Shows temporal boundaries preserved (first + last events)
+- Shows random middle sampling
+- Shows 10% benign / 90% malicious budget allocation
+- Metrics: Original counts in legend, sampled data in plot
+
+Figure 9.6: Verification Matrix Schema
+- Type: Table schema diagram showing 43 columns
+- Column groups (color-coded):
+- Core NetFlow (8 cols): timestamp, IPs, ports, protocol, etc. - Blue
+- Sysmon Attribution (12 cols): ProcessGuid, CommandLine, EventID, etc. - Green
+- Labeling Metadata (10 cols): Label, Tactic, Technique, Tier, etc. - Orange
+- Causality Analysis (8 cols): Correlation score, time delta, etc. - Purple
+- Verification (5 cols): Manual review flags, corrections, notes - Red
+- Visual: Grid layout with column names and data types
+
+Figure 9.7: Complete Pipeline Output Ecosystem
+- Type: Output file relationship diagram
+- Center: verification_matrix_run-XX.csv (main output)
+- Surrounding outputs:
+- timeline_dual_domain.png (visualization)
+- attribution_summary.json (metadata)
+- configuration_summary.yaml (settings)
+- subfolders by protocol (tcp/, udp/, icmp/)
+- Connections: Show how files relate to each other
+
+---
+CROSS-CUTTING FIGURES (for overall understanding)
+
+Figure X.1: Data Volume Funnel Across Pipeline
+- Type: Funnel chart showing data reduction/expansion
+- Stages:
+a. Raw Elasticsearch events: ~500K-5M events
+b. Sysmon CSV: ~150K events (Step 2)
+c. NetFlow CSV: ~10K-100K flows (Step 3)
+d. Target events (EventID 1,11,23): ~50K events (Step 6)
+e. Seed events (manual marking): ~100-300 events (Step 6→7)
+f. Traced events: ~200-1000 events (Step 7)
+g. Labeled Sysmon: ~150K events with labels (Step 8)
+h. Labeled NetFlow: ~10K-100K flows with labels (Step 9)
+
+Figure X.2: Human-in-Loop Touch points
+- Type: Pipeline diagram with human interaction points highlighted
+- Shows:
+- Step 6 → 7: Manual seed event marking (REQUIRED)
+- Step 7 → 8: Optional Correct_SeedRowNumber corrections
+- Step 9: Interactive wizard configuration (6 decisions)
+- Icons: Human silhouettes at interaction points
+- Estimated time: Time estimates for each manual step
+
+Figure X.3: Dataset Quality Progression
+- Type: Quality metrics radar chart comparing pipeline stages
+- Metrics (0-100% each):
+- Completeness (% of events with all fields)
+- Labeling coverage (% of events labeled)
+- Attribution confidence
+- Temporal precision
+- Schema consistency
+- Comparison: Raw data (Step 1) vs Final output (Step 9)
+
+---
+RECOMMENDATIONS FOR IMPLEMENTATION
+
+1. Global Figure (Figure G1): This should be the FIRST figure in any paper/documentation
+- Provides high-level understanding of entire pipeline
+- Shows optional branches clearly
+- Emphasizes dual-domain nature
+2. Priority Figures (must have for each step):
+- Step 1: Figure 1.1 (architecture)
+- Step 2: Figure 2.2 (schema transformation)
+- Step 3: Figure 3.1 (flow aggregation logic)
+- Step 6: Figure 6.1 (filtering funnel) + Figure 6.2 (manual workflow)
+- Step 7: Figure 7.1 (ProcessGuid tree) + Figure 7.4 (timeline example)
+- Step 8: Figure 8.2 (label distribution pyramid) + Figure 8.3 (tactic breakdown)
+- Step 9: Figure 9.1 (wizard flow) + Figure 9.2 (three-tier system) + Figure 9.3
+(dual-domain correlation)
+3. For Publication:
+- Use Global Figure G1 in abstract/introduction
+- Use Figure X.1 (data volume funnel) to show scalability
+- Use Step 9 figures prominently (final output = most important)
+- Include Figure X.2 to emphasize human-in-loop methodology
+4. Color Scheme Consistency:
+- Benign data: Gray/Blue tones
+- Malicious data: Red/Orange tones
+- Sysmon domain: Blue spectrum
+- NetFlow domain: Green spectrum
+- Human interaction: Yellow/Gold
+- MITRE ATT&CK tactics: Standard MITRE color palette
+5. Figure Format:
+- Vector graphics (SVG/PDF) for diagrams, flowcharts, trees
+- High-res PNG for screenshots, examples
+- Use consistent fonts, line weights, icon sets
+- Add legends, annotations, and clear labels

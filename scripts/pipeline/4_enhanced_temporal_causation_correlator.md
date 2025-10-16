@@ -141,6 +141,13 @@ analysis/correlation-analysis-v3/apt-X/run-XX/
 ## Correlation Algorithms
 
 ### Temporal Causation Detection
+
+The core algorithm establishes temporal causation by correlating Sysmon process events with NetFlow records within configurable time windows, using process IDs and community IDs for attribution.
+
+![Figure 4.1: Temporal Causation Window Analysis](figures/figure_4_1_temporal_causation.png)
+**Figure 4.1**: Timeline visualization showing temporal causation analysis. Sysmon events (vertical bars, upper timeline) are correlated with NetFlow events (horizontal flow segments, lower timeline) using temporal correlation windows (shaded regions, typically ±10 seconds). Curved arrows indicate attributed correlations with color-coded confidence levels. This dual-timeline approach enables precise identification of which network flows resulted from specific host activities.
+
+**Detection Components:**
 1. **Process-Network Mapping**: Links process creation/execution to network flows
 2. **Timing Analysis**: Identifies causation relationships within temporal windows
 3. **Attribution Confidence**: Scores based on temporal proximity and process context
@@ -189,11 +196,21 @@ Sysmon CSV + NetFlow CSV → Temporal Correlation → Attribution Analysis → S
 - **APT-5** (Runs 45-47): APT-29 variants
 - **APT-6** (Runs 48-50): Wizard Spider based
 
+### Attribution Performance Comparison
+
+Correlation quality varies significantly across APT campaign types, with APT-4 and APT-5 (APT-29 based) achieving the highest attribution rates due to their structured attack patterns and consistent network behavior.
+
+![Figure 4.2: Attribution Rate by APT Campaign](figures/figure_4_2_attribution_by_campaign.png)
+**Figure 4.2**: Comparative analysis of NetFlow attribution rates across all six APT campaign types. Bar heights show mean attribution percentage with error bars indicating standard deviation across multiple runs. APT-4 (85.4%) and APT-5 (82.1%) achieve high-performing status (≥80%, green bars), while APT-6 (65.7%, red bar) shows lower attribution due to ransomware's rapid execution patterns. The 90% threshold line (green dashed) indicates ideal performance targets.
+
 ### Campaign-Specific Insights
-- **Attribution Rates**: Varies by campaign complexity
-- **Temporal Patterns**: Different attack timing signatures
-- **Process Patterns**: Campaign-specific tool usage
-- **Network Patterns**: Unique C2 communication signatures
+- **Attribution Rates**: Varies by campaign complexity (range: 65-85%)
+- **Temporal Patterns**: Different attack timing signatures affect correlation windows
+- **Process Patterns**: Campaign-specific tool usage influences PID attribution accuracy
+- **Network Patterns**: Unique C2 communication signatures enable higher confidence scoring
+
+![Figure 4.3: Process Attribution Breakdown](figures/figure_4_3_process_attribution.png)
+**Figure 4.3**: Hierarchical treemap showing process-level attribution breakdown. Outer boxes represent APT campaigns, inner boxes show executable types, and box sizes are proportional to the number of attributed flows. Color intensity indicates attribution confidence (darker = higher confidence). This visualization reveals which process types are most reliably correlated with network activity across different adversary campaigns.
 
 ## Quality Assurance
 

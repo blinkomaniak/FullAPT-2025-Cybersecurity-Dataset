@@ -69,7 +69,7 @@ abilities:
   name:  Run Agent Executable for Initial Access
   tactic:  execution
   technique_name:  "User Execution: Malicious File"
-  technique_id:  T1204.002
+  technique_id:  T1204.002a
   executors: 
    - sh:
      platform: linux

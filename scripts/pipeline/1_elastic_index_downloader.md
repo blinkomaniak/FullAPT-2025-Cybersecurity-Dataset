@@ -7,6 +7,13 @@
 
 **Position in Pipeline**: First step - data extraction from monitoring infrastructure
 
+## Architecture Overview
+
+The Elasticsearch data extraction architecture consists of three main components: the Elasticsearch cluster, the scroll API mechanism for bulk downloads, and compressed JSONL outputs for downstream processing.
+
+![Figure 1.1: Elasticsearch Data Extraction Architecture](figures/figure_1_1_elasticsearch_architecture.png)
+**Figure 1.1**: System architecture showing Elasticsearch cluster connection, scroll API pagination, and dual output streams (Sysmon and NetFlow JSONL files). The scroll API enables memory-efficient bulk downloads of large datasets.
+
 ## Functionality
 
 ### Core Capabilities
@@ -20,6 +27,13 @@
 - **Sysmon Events**: Windows system monitoring events (`sysmon` keyword)
 - **Network Traffic**: Network flow data (`network_traffic` keyword)
 - **Target Indices**: Discovers indices matching APT campaign patterns
+
+### Index Discovery Process
+
+The script automatically discovers Elasticsearch indices by matching keywords against index names. This pattern-matching approach identifies relevant indices without manual configuration.
+
+![Figure 1.2: Index Discovery Pattern Matching](figures/figure_1_2_index_discovery.png)
+**Figure 1.2**: Pattern matching flowchart showing how keywords (`sysmon`, `network_traffic`) are matched against Elasticsearch index names to identify target indices for download. The discovery process handles multiple APT run patterns automatically.
 
 ## Usage
 

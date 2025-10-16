@@ -1,0 +1,109 @@
+{
+    "transformation_modes": {
+        "vmware_mode": {
+            "data_exfiltration_tool": "VMware.exe",
+            "data_staging_dir": "C:\\ProgramData\\VMware",
+            "data_file_name": "Nt.dat"
+        },
+        "chrome_mode": {
+            "data_exfiltration_tool": "chrome.exe", 
+            "data_staging_dir": "C:\\ProgramData\\Chrome",
+            "data_file_name": "chrome.exe"
+        }
+    },
+    
+    "run_configurations": {
+        "runs_01-13": {
+            "mode": "vmware_mode",
+            "complex_transforms": ["transform_complex_23", "transform_complex_38", "transform_complex_40", "transform_complex_41"],
+            "entry_ranges": {
+                "transform_function_1": "0-22,24,30,32,42-43",
+                "transform_function_2": "25-27,29,31", 
+                "transform_function_3": "28,35-37",
+                "transform_function_4": "33-34"
+            }
+        },
+        "runs_14-17_19-20": {
+            "mode": "chrome_mode", 
+            "complex_transforms": ["transform_complex_21", "transform_complex_35", "transform_complex_37", "transform_complex_38"],
+            "entry_ranges": {
+                "transform_function_1": "0-20,22,28-29,36,39-40",
+                "transform_function_2": "23-25,27",
+                "transform_function_3": "26,32-34", 
+                "transform_function_4": "30-31"
+            }
+        },
+        "run_18": {
+            "mode": "vmware_mode",
+            "complex_transforms": ["transform_complex_23", "transform_complex_38", "transform_complex_40", "transform_complex_41"],
+            "entry_ranges": {
+                "transform_function_1": "0-22,24,30,32,42-43",
+                "transform_function_2": "25-27,29,31",
+                "transform_function_3": "28,35-37", 
+                "transform_function_4": "33-34"
+            }
+        }
+    },
+    
+    "command_patterns": {
+        "passthrough_exact_matches": [
+            "whoami", "hostname", "ipconfig /all", "net user /domain",
+            "net group /domain", "net group \"domain admins\" /domain",
+            "net group \"Exchange Trusted Subsystem\" /domain", "net accounts /domain",
+            "net user", "net localgroup administrators", "netstat -na", "tasklist",
+            "sc query", "systeminfo", "net user gosta /domain",
+            "net group \"SQL Admins\" /domain", "nslookup 10.1.0.6",
+            "cscript /nologo computername.vbs", "cscript /nologo username.vbs"
+        ],
+        
+        "regex_patterns": {
+            "webshell_command": "curl.*--data\\s+\"cmd=([^\"]+)\"",
+            "webshell_upload": "curl.*-F\\s+['\"]sav=([^'\"]+)['\"].*-F\\s+[\"']nen=([^\"']+)[\"']",
+            "exec_background": "^exec-background\\s+(.+)",
+            "file_download": "curl.*-o\\s+\\w+\\.txt.*--data\\s+['\"]don=",
+            "data_exfiltration": "curl.*-F\\s+\"data=@.*--header\\s+\"X-Request-ID:\\s+\\w+-\\w+\".*http://.*:8888/file/upload",
+            "agent_communication": "curl.*-H\\s+\"KEY:ADMIN123\".*api/v2/agents",
+            "sleep_command": "^sleep\\s+",
+            "rdp_command": "^exec-background\\s+xfreerdp",
+            "copy_to_remote": "copy.*\"\\\\\\\\[\\d\\.]+\\\\C\\$\\\\"
+        }
+    },
+    
+    "complex_transformation_templates": {
+        "webshell_install": {
+            "pattern": "copy.*contact\\.aspx.*Exchange.*ews",
+            "derived_commands": [
+                "{original_command}",
+                "C:\\Program Files\\Microsoft\\Exchange Server\\V15\\ClientAccess\\exchweb\\ews\\contact.aspx"
+            ]
+        },
+        
+        "privilege_escalation": {
+            "pattern": "mom64\\.exe.*privilege::debug.*sekurlsa",
+            "derived_commands": [
+                "C:\\Windows\\system32\\cmd.exe",
+                "C:\\Windows\\System32\\mom64.exe  \"\"privilege::debug\"\" \"\"sekurlsa::pth /user:tous /domain:boombox /ntlm:30d804728ae8ca806fa183a81d8b97b0\"\"",
+                "C:\\ProgramData\\{data_file_name}",
+                "C:\\Windows\\System32\\ps.exe  \\\\10.1.0.7 cmd.exe"
+            ]
+        },
+        
+        "data_exfiltration": {
+            "pattern": "{data_exfiltration_tool}.*--path.*--to.*shirinfarhad\\.com",
+            "derived_commands": [
+                "{data_staging_dir}",
+                "{original_command}"
+            ]
+        },
+        
+        "cleanup": {
+            "pattern": "del.*\\.(exe|dat)",
+            "derived_commands": [
+                "{data_staging_dir}\\{data_exfiltration_tool}",
+                "C:\\Windows\\System32\\mom64.exe",
+                "C:\\Windows\\Temp\\{data_file_name}",
+                "C:\\Windows\\System32\\ps.exe"
+            ]
+        }
+    }
+}
